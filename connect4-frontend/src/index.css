@@ -1,0 +1,30 @@
+.cell {
+    border-style:solid;
+    border-color: black;
+    padding: 2px;
+    height: 30px;
+    width: 30px;
+}
+.row{
+    display:flex;
+}
+.board{
+    display:grid;
+    justify-content: center;
+}
+.player1{
+    border-style:solid;
+    border-color: black;
+    padding: 2px;
+    height: 30px;
+    width: 30px;
+    background-color: aquamarine;
+}
+.player2{
+    border-style:solid;
+    border-color: black;
+    padding: 2px;
+    height: 30px;
+    width: 30px;
+    background-color: blueviolet;
+}
