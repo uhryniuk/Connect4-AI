@@ -1,39 +1,47 @@
-import React, {useState} from "react"
+import React from "react"
 import './index.css'
-import BoardHelpers from './util/BoardHelpers'
+import bh from './util/BoardHelpers'
 
 
 /**
- * createBoard()
- * We need a "serialize" board function to turn the base json in to the board.
- * Takes the board data and turns it into the DOM Object.
- * 
  * getOpponentResponse()
  * Send the updated "serialized" board via POST to the simple server.
  * Server will handle the proxy and send it to the desired AI.
- * 
  */
 
 export default function Board(props){
     const boardState = [props.playerState.board, props.playerState.setBoard]
-    renderBoard(props.playerState.board)
+    constructBoard(props.playerState.board)
 
+    /**
+     * Passes the play state to the other player.
+     * @returns String of current player
+     */
     function convertPlayerTurn(){
         if(props.playerState.playerTurn == 'player1') return 'player2'
         else return 'player1'
     }
 
-    function renderBoard(board){
+    /**
+     * 
+     * @param {6x7 matrix repersentation of the board} board 
+     * @returns Completed Board DOM JSX object to be rendered.
+     */
+    function constructBoard(board){
+
+        // Traverse 6 x 7 to construct the connect 4 board,
         let cellMatrix = []
         for(let i = 0; i < 6; i++){
             let cellRow = []
             for(let j = 0; j < 7; j++){
-                console.log(board[i][j], `${i}:${j}`)
-                cellRow.push(Cell(`${i}:${j}`, board))
+                // Add each cell with information
+                cellRow.push(Cell(`${i}:${j}`, board, board[i][j]))
             }
+            // Add each row into the list of rows.
             cellMatrix.push(<div className={'row'}>{cellRow}</div>)
         }
-        console.log(cellMatrix)
+
+        // Finally, return the JSX Connect4 Board.
         return(
             <div>
                 {cellMatrix}
@@ -48,43 +56,45 @@ export default function Board(props){
      * @param {*} board Matrix of matrixIndexes
      * @returns Creates the Cell Object for the DOM
      */
-    function Cell(matrixIndex, board){
-        // Convert JSON cell value to DOM cell value
-        let cell;
-        const turn = props.playerState.playerTurn
-        switch(turn){
-            case 'player1': cell = '1';
-                break;
-            case 'player2': cell = '2';
-                break;
-            default: cell = '0'
-        }
-        // Swap the players turns current
-        // Init the cell state for Cell Object
-        const [cellState, setCellState] = useState('cell')
+    function Cell(matrixIndex, board, color){
+        
+        /**
+         * When cell clicked in column, highlight the next highest
+         */
+        function findAvailableCell(playerTurnInt, jthIndex){
 
+            for(let i = board.length-1; i >= 0; i--){
+                
+                let currentIndex = board[i][jthIndex]
+                if (currentIndex === '0'){
+                    board[i][jthIndex] = playerTurnInt
+                    props.playerState.setBoard(board)
+                    console.log(board)
+                    break;
+                }
+            }
+            // Handle that no valid position is found.
+            // This might be toggle some css to make a warning appear?
+        }
+
+        // Convert JSON cell value to DOM cell value
+        let playerTurnInt = bh.convertPlayerToCellValue(props.playerState.playerTurn)
+        const cellClass = bh.convertCellValueToPlayer(color)
+        // Swap the players turns current
+        
         // Return our Unqiue Cell Object with contextual data
-        return <div className={cellState} id={matrixIndex} onClick={() => {
-            setCellState(turn)
-            const indexes = matrixIndex.split(':')
-            console.log(board[indexes[0]][indexes[1]])
-            board[indexes[0]][indexes[1]] = cell
-            props.playerState.setBoard(board)
+        return <div className={cellClass} id={matrixIndex} onClick={() => {
+            const cellIndexes = matrixIndex.split(':')
+            findAvailableCell(playerTurnInt, Number(cellIndexes[1]))
             props.playerState.setPlayerTurn(convertPlayerTurn())
         }}></div>
     }   
-    function buildRow(){
-        let row = []
-        for(let i = 0; i < 7; i ++){
-            row.push(Cell({class:"cell"}))
-        }
-        return row
-    }
-    let board = []
-    for(let i = 0; i < 6; i++){
-        
-        board.push(<div className={'row'}>{buildRow()}</div>)
-    }
-
-    return(<div className={'board'} >{renderBoard(props.playerState.board)}</div>)
+    
+    return(
+        <div 
+            className={'board'}>{
+                constructBoard(props.playerState.board)
+            }
+        </div>
+    )
 }
