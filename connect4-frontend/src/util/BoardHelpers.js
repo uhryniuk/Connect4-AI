@@ -64,7 +64,6 @@ function horizonalCheck(row){
         }
         // Check for winner (certainly can optimize this)
         if( (currentValue == '1' || currentValue == '2') && valueCount >= 4 ){
-            console.log("REMOVE ME::::: Winner is found!: ", currentValue)
             return currentValue
         }
     }
@@ -95,7 +94,6 @@ function verticalCheck(board) {
             }
             // Check for winner (certainly can optimize this)
             if( (currentValue == '1' || currentValue == '2') && valueCount >= 4 ){
-                console.log("REMOVE ME::::: Winner is found!: ", currentValue)
                 return currentValue
             }
         }
@@ -112,17 +110,17 @@ function diagonalCheck(board){
 
     /**
      * Utility function to search from top left -> bottom right side of board.
-     * @param {*} value 
-     * @param {*} row 
-     * @param {*} column 
-     * @param {*} depthCount 
-     * @returns 
+     * @param {*} value Value of the current node's index
+     * @param {*} row Row value of the node
+     * @param {*} column Column value of the node
+     * @param {*} depthCount How many same node values we have collected in current line.
+     * @returns Winning node value (if one exists otherwise null)
      */
     const searchLeftDiagonal = (value, row, column, depthCount) => {
         // Base case that we are out bounds of matrix.
         if ( board[row] === undefined || board[row][column] === undefined) return null
 
-        let winner; // Global var to assign a winner
+        let winner= null; // Global var to assign a winner
 
         // If we found another value in matching line.
         if ( board[row][column] === value && board[row][column] !== '0'){
@@ -142,22 +140,55 @@ function diagonalCheck(board){
         return winner
     }
 
+    // TODO This is identical to above except for the dfs functions
+    // So can easily use callbacks and first order funcs to optimize the both of these.
     const searchRightDiagonal = (value, row, column, depthCount) => {
-        
+        // Base case that we are out bounds of matrix.
+        if ( board[row] === undefined || board[row][column] === undefined) return null
+
+        let winner= null; // Global var to assign a winner
+
+        // If we found another value in matching line.
+        if ( board[row][column] === value && board[row][column] !== '0'){
+            depthCount++;
+            
+            // Check if we have winning line
+            if (depthCount >= 4) return board[row][column]
+            // Otherwise go deeper to the next node.
+            winner = searchRightDiagonal(value, row+1, column-1, depthCount)
+        } // Otherwise reset counter and value type, go to next node.
+        else {
+            // TODO -> Further logic optimization possible.
+            winner = searchRightDiagonal(board[row][column], row+1, column-1, 1)
+        }
+
+        // Return a winner if we have actually found one.
+        return winner
     }
 
     // Check starting from the top slots of the board.
     for (let i = 0; i < board[0].length; i++){
         const start = board[0][i]
-        const horizonalWinner = searchLeftDiagonal(start, 0+1, i+1, 1)
-        if ( horizonalWinner ) return horizonalWinner
+        // Ex Path: 0,0 -> 1,1 -> 2,2
+        const horizonalWinnerLeft = searchLeftDiagonal(start, 0+1, i+1, 1)
+        if ( horizonalWinnerLeft ) return horizonalWinnerLeft
+
+        // Ex Path: 0,6 -> 1,5 -> 2,4
+        const horizonalWinnerRight = searchRightDiagonal(start, 0+1, i-1, 1)
+        if ( horizonalWinnerRight ) return horizonalWinnerRight
+        // if ( horizonalWinner ) return horizonalWinner
     }
 
     // Check starting from the left and right sides of board
     for ( let i = 0; i < board.length; i++ ){
-        const start = board[i][0]
-        const verticalWinner  = searchLeftDiagonal(start, i+1, 0+1, 1)
-        if ( verticalWinner ) return verticalWinner
+        const start = board[i][6]
+        // Ex Path: 2,0 -> 3,1 -> 4,2
+        const verticalWinnerLeft  = searchLeftDiagonal(start, i+1, 6-1, 1)
+        if ( verticalWinnerLeft ) return verticalWinnerLeft
+
+        // Ex Path: 2,6 -> 3,5 -> 4,4
+        const verticalWinnerRight  = searchRightDiagonal(start, i+1, 6-1, 1)
+        if ( verticalWinnerRight ) return verticalWinnerRight
     }
 
     // Base case for no winner found.
@@ -169,12 +200,11 @@ function diagonalCheck(board){
  * @param {*} board 
  */
 function winnerCheck(board){
-    // verticalCheck(board)
+    verticalCheck(board)
     for(const row of board){
-        // horizonalCheck(row)
+        horizonalCheck(row)
     }
     const winner = diagonalCheck(board)
-    console.log("REMOVE ME::::: Winner is found!: ", winner)
 }
 
 /**
