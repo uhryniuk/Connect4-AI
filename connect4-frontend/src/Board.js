@@ -69,25 +69,24 @@ export default function Board(props){
                 if (currentIndex === '0'){
                     board[i][jthIndex] = playerTurnInt
                     props.playerState.setBoard(board)
-                    console.log(board)
                     break;
                 }
             }
             // Handle that no valid position is found.
             // This might be toggle some css to make a warning appear?
         }
-
+        
         // Convert JSON cell value to DOM cell value
         let playerTurnInt = bh.convertPlayerToCellValue(props.playerState.playerTurn)
         const cellClass = bh.convertCellValueToPlayer(color)
         // Swap the players turns current
-        
+        const cellIndexes = matrixIndex.split(':')
         // Return our Unqiue Cell Object with contextual data
         return <div className={cellClass} id={matrixIndex} onClick={() => {
-            const cellIndexes = matrixIndex.split(':')
             findAvailableCell(playerTurnInt, Number(cellIndexes[1]))
+            bh.winnerCheck(props.playerState.board)
             props.playerState.setPlayerTurn(convertPlayerTurn())
-        }}></div>
+        }}>{cellIndexes[0]},{cellIndexes[1]}</div> // TODO REMOVE ME, TEXT IS FOR DEBUGGING!
     }   
     
     return(
