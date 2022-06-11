@@ -109,40 +109,59 @@ function verticalCheck(board) {
  * @param {*} board Matrix n*m gameboard.
  */
 function diagonalCheck(board){
+
+    /**
+     * Utility function to search from top left -> bottom right side of board.
+     * @param {*} value 
+     * @param {*} row 
+     * @param {*} column 
+     * @param {*} depthCount 
+     * @returns 
+     */
     const searchLeftDiagonal = (value, row, column, depthCount) => {
+        // Base case that we are out bounds of matrix.
         if ( board[row] === undefined || board[row][column] === undefined) return null
 
-        console.log(value, depthCount, [row, column])
-        let winner = null;
-        if ( board[row][column] === value ){
+        let winner; // Global var to assign a winner
+
+        // If we found another value in matching line.
+        if ( board[row][column] === value && board[row][column] !== '0'){
             depthCount++;
-            // This zero check may be redundant and can externalize after calls are done.
-            if (depthCount === 4 && board[row][column] !== '0') return board[row][column]
-
+            
+            // Check if we have winning line
+            if (depthCount >= 4) return board[row][column]
+            // Otherwise go deeper to the next node.
             winner = searchLeftDiagonal(value, row+1, column+1, depthCount)
-
-        } else{
-            winner = searchLeftDiagonal(board[row][value], row+1, column+1, 1)
+        } // Otherwise reset counter and value type, go to next node.
+        else {
+            // TODO -> Further logic optimization possible.
+            winner = searchLeftDiagonal(board[row][column], row+1, column+1, 1)
         }
+
+        // Return a winner if we have actually found one.
         return winner
     }
 
-    const searchRightDiagonal = (row, column, depthCount) => {
+    const searchRightDiagonal = (value, row, column, depthCount) => {
         
     }
 
+    // Check starting from the top slots of the board.
     for (let i = 0; i < board[0].length; i++){
-        const horizonalStarter = board[0][i]
-        const horizonalWinner = searchLeftDiagonal(horizonalStarter, 0+1, i+1, 1)
+        const start = board[0][i]
+        const horizonalWinner = searchLeftDiagonal(start, 0+1, i+1, 1)
         if ( horizonalWinner ) return horizonalWinner
     }
+
+    // Check starting from the left and right sides of board
     for ( let i = 0; i < board.length; i++ ){
-        const verticalStarter = board[i][0]
-        const verticalWinner  = searchLeftDiagonal(verticalStarter, i+1, 0+1, 1)
+        const start = board[i][0]
+        const verticalWinner  = searchLeftDiagonal(start, i+1, 0+1, 1)
         if ( verticalWinner ) return verticalWinner
     }
-    return null
 
+    // Base case for no winner found.
+    return null
 }
 
 /**
