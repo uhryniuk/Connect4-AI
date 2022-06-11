@@ -109,6 +109,39 @@ function verticalCheck(board) {
  * @param {*} board Matrix n*m gameboard.
  */
 function diagonalCheck(board){
+    const searchLeftDiagonal = (value, row, column, depthCount) => {
+        if ( board[row] === undefined || board[row][column] === undefined) return null
+
+        console.log(value, depthCount, [row, column])
+        let winner = null;
+        if ( board[row][column] === value ){
+            depthCount++;
+            // This zero check may be redundant and can externalize after calls are done.
+            if (depthCount === 4 && board[row][column] !== '0') return board[row][column]
+
+            winner = searchLeftDiagonal(value, row+1, column+1, depthCount)
+
+        } else{
+            winner = searchLeftDiagonal(board[row][value], row+1, column+1, 1)
+        }
+        return winner
+    }
+
+    const searchRightDiagonal = (row, column, depthCount) => {
+        
+    }
+
+    for (let i = 0; i < board[0].length; i++){
+        const horizonalStarter = board[0][i]
+        const horizonalWinner = searchLeftDiagonal(horizonalStarter, 0+1, i+1, 1)
+        if ( horizonalWinner ) return horizonalWinner
+    }
+    for ( let i = 0; i < board.length; i++ ){
+        const verticalStarter = board[i][0]
+        const verticalWinner  = searchLeftDiagonal(verticalStarter, i+1, 0+1, 1)
+        if ( verticalWinner ) return verticalWinner
+    }
+    return null
 
 }
 
@@ -121,7 +154,8 @@ function winnerCheck(board){
     for(const row of board){
         // horizonalCheck(row)
     }
-    diagonalCheck(board)
+    const winner = diagonalCheck(board)
+    console.log("REMOVE ME::::: Winner is found!: ", winner)
 }
 
 /**
