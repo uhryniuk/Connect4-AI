@@ -10,7 +10,6 @@ import bh from './util/BoardHelpers'
  */
 
 export default function Board(props){
-    const boardState = [props.playerState.board, props.playerState.setBoard]
     constructBoard(props.playerState.board)
 
     /**
@@ -18,7 +17,7 @@ export default function Board(props){
      * @returns String of current player
      */
     function convertPlayerTurn(){
-        if(props.playerState.playerTurn == 'player1') return 'player2'
+        if(props.playerState.playerTurn === 'player1') return 'player2'
         else return 'player1'
     }
 
@@ -84,9 +83,10 @@ export default function Board(props){
         // Return our Unqiue Cell Object with contextual data
         return <div className={cellClass} id={matrixIndex} onClick={() => {
             findAvailableCell(playerTurnInt, Number(cellIndexes[1]))
-            bh.winnerCheck(props.playerState.board)
+            // This has our winner value to use
+            console.log(bh.winnerCheck(props.playerState.board))
             props.playerState.setPlayerTurn(convertPlayerTurn())
-        }}>{cellIndexes[0]},{cellIndexes[1]}</div> // TODO REMOVE ME, TEXT IS FOR DEBUGGING!
+        }}></div>
     }   
     
     return(

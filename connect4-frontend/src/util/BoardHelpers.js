@@ -49,22 +49,24 @@ function convertPlayerToCellValue(player){
  * @param {*} row 
  * @returns the playerValue that has a valid winner in the rowl.
  */
-function horizonalCheck(row){
+function horizonalCheck(board){
     // Keeps the sliding window count
     let currentValue = null;
     let valueCount = 0;
 
     // Iterate over the row
-    for(let i = 0; i < row.length; i++){
-        // Add it to thr row count
-        if(row[i] == currentValue) valueCount++;
-        else{
-            currentValue = row[i]
-            valueCount = 1
-        }
-        // Check for winner (certainly can optimize this)
-        if( (currentValue == '1' || currentValue == '2') && valueCount >= 4 ){
-            return currentValue
+    for ( const row of board ){
+        for(let i = 0; i < row.length; i++){
+            // Add it to thr row count
+            if(row[i] === currentValue) valueCount++;
+            else{
+                currentValue = row[i]
+                valueCount = 1
+            }
+            // Check for winner (certainly can optimize this)
+            if( (currentValue === '1' || currentValue === '2') && valueCount >= 4 ){
+                return currentValue
+            }
         }
     }
     // No winner was found horizontally.
@@ -85,15 +87,15 @@ function verticalCheck(board) {
 
     // We need outer inex for [j][i] style indexing (ik so bad to do)
     let index = 0
-    while(index < 6){
+    while(index < 7){
         for(let j = 0; j < board.length; j++){
-            if(board[j][index] == currentValue) valueCount++;
+            if(board[j][index] === currentValue) valueCount++;
             else{
                 currentValue = board[j][index]
                 valueCount = 1
             }
             // Check for winner (certainly can optimize this)
-            if( (currentValue == '1' || currentValue == '2') && valueCount >= 4 ){
+            if( (currentValue === '1' || currentValue === '2') && valueCount >= 4 ){
                 return currentValue
             }
         }
@@ -181,13 +183,17 @@ function diagonalCheck(board){
 
     // Check starting from the left and right sides of board
     for ( let i = 0; i < board.length; i++ ){
-        const start = board[i][6]
+
+        // Starting position for left side
+        const startLeft = board[i][0]
         // Ex Path: 2,0 -> 3,1 -> 4,2
-        const verticalWinnerLeft  = searchLeftDiagonal(start, i+1, 6-1, 1)
+        const verticalWinnerLeft  = searchLeftDiagonal(startLeft, i+1, 0+1, 1)
         if ( verticalWinnerLeft ) return verticalWinnerLeft
 
+        // Starting position for the right side.
+        const startRight = board[i][6]
         // Ex Path: 2,6 -> 3,5 -> 4,4
-        const verticalWinnerRight  = searchRightDiagonal(start, i+1, 6-1, 1)
+        const verticalWinnerRight  = searchRightDiagonal(startRight, i+1, 6-1, 1)
         if ( verticalWinnerRight ) return verticalWinnerRight
     }
 
@@ -200,11 +206,16 @@ function diagonalCheck(board){
  * @param {*} board 
  */
 function winnerCheck(board){
-    verticalCheck(board)
-    for(const row of board){
-        horizonalCheck(row)
-    }
-    const winner = diagonalCheck(board)
+    let winner = verticalCheck(board)
+    if ( winner ) return winner
+
+    winner = horizonalCheck(board)
+    if ( winner ) return winner
+
+    winner = diagonalCheck(board)
+    if ( winner ) return winner 
+    
+    return null
 }
 
 /**
