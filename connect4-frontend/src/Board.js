@@ -42,7 +42,7 @@ export default function Board(props){
 
         // Finally, return the JSX Connect4 Board.
         return(
-            <div>
+            <div className={'matrix'}>
                 {cellMatrix}
             </div>
         )
@@ -81,12 +81,17 @@ export default function Board(props){
         // Swap the players turns current
         const cellIndexes = matrixIndex.split(':')
         // Return our Unqiue Cell Object with contextual data
-        return <div className={cellClass} id={matrixIndex} onClick={() => {
-            findAvailableCell(playerTurnInt, Number(cellIndexes[1]))
-            // This has our winner value to use
-            console.log(bh.winnerCheck(props.playerState.board))
+        return <div className={'cell-slot'} id={matrixIndex} onClick={() => {
+            // Don't update board anymore if we have a winner.
+            if( !props.playerState.gameWinner ){
+                findAvailableCell(playerTurnInt, Number(cellIndexes[1]))
+            }
+            
+            // check for winners and update the winner state.
+            props.playerState.setGameWinner(bh.winnerCheck(props.playerState.board))
+            // Player makes their move (subject to change with AI)
             props.playerState.setPlayerTurn(convertPlayerTurn())
-        }}></div>
+        }}><div className={cellClass}></div></div>
     }   
     
     return(
