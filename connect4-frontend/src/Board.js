@@ -2,7 +2,6 @@ import React from "react"
 import './index.css'
 import bh from './util/BoardHelpers'
 
-
 /**
  * getOpponentResponse()
  * Send the updated "serialized" board via POST to the simple server.
