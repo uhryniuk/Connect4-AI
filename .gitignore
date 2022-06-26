@@ -1,1 +1,4 @@
 */node_modules/
+connect4-backend/target/
+connect4-backend/src/main/java/c4/endpoints/
+connect4-backend/target/maven-status/

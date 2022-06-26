@@ -1,9 +1,10 @@
-# Running the Backend
+# Web Server Framework to make it simple to add endpoints.
+- It's about adding features in the future not what we have right now.
 
-## Compiling the Project
-- Run `mvn package` to build the final jar file.
+# Design Pattern Consistency
+- Make use of what is learned.
 
-## Running the project.
-- Run `java -jar [name of jar].jar`
-
+# Change to get better with unit tests.
+- Make sure to test wherever I can!
+- This is good for resume but also for professional development.
 
