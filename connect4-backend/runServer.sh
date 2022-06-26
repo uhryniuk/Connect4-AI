@@ -1,0 +1,6 @@
+#!/bin/sh
+echo Running Build...
+mvn package > /dev/null
+
+echo Running Server...
+java -jar "./target/connect4-backend-1.0-SNAPSHOT.jar"
