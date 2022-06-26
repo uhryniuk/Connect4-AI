@@ -8,3 +8,5 @@
 - Make sure to test wherever I can!
 - This is good for resume but also for professional development.
 
+# GSON wiki for development 
+https://sites.google.com/site/gson/gson-user-guide
