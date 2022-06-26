@@ -4,9 +4,12 @@ import java.io.OutputStream;
 import java.io.IOException;
 import com.sun.net.httpserver.HttpExchange;
 
+import c4.server.response.Endpoint;
+
 public class Get implements IRequestMethod{
-    public void respond(HttpExchange ex, String response) throws IOException{
+    public void respond(HttpExchange ex, Endpoint resObj) throws IOException{
         try{
+            String response = resObj.getResponse();
             ex.getResponseHeaders().set("Content-Type", "application/json");
             ex.sendResponseHeaders(200, response.length());
 

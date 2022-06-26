@@ -2,10 +2,9 @@ package c4.server;
 
 import java.io.IOException;
 import com.sun.net.httpserver.HttpHandler;
-import c4.server.methods.Get;
 import c4.server.methods.IRequestMethod;
 import c4.server.methods.MethodMapper;
-
+import c4.server.response.Endpoint;
 import com.sun.net.httpserver.HttpExchange;
 
 public class Handler implements HttpHandler {
@@ -16,19 +15,23 @@ public class Handler implements HttpHandler {
 
     private String route;
     private IRequestMethod requestMethod;
-    private String response = "HELLO WORLD!!!!";
+    private Endpoint endpoint;
 
+    // Still need to implement builder versions.
     public Handler(){}
-    public Handler(String route, String requestMethod){
-        this.route = route;
-        this.requestMethod = MethodMapper.getMethod(requestMethod);
+
+
+    public Handler(Endpoint endpoint){
+        this.route = endpoint.getRoute();
+        this.requestMethod = MethodMapper.getMethod(endpoint.getMethod());
+        this.endpoint = endpoint;
     }
 
     @Override
     public void handle(HttpExchange ex){
         try{
             // Obviously this doesn't stay here.
-            requestMethod.respond(ex, response);
+            requestMethod.respond(ex, endpoint);
         } catch (IOException e) {
             System.out.println("Handler Died...");
         }

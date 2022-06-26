@@ -5,9 +5,12 @@ import java.io.InputStream;
 import java.io.IOException;
 import com.sun.net.httpserver.HttpExchange;
 
+import c4.server.response.Endpoint;
+
 public class Post implements IRequestMethod{
-    public void respond(HttpExchange ex, String response) throws IOException{
+    public void respond(HttpExchange ex, Endpoint resObj) throws IOException{
         try{
+            String response = resObj.getResponse();
             ex.getResponseHeaders().set("Content-Type", "application/json");
             
             InputStream is = ex.getRequestBody();
@@ -19,8 +22,14 @@ public class Post implements IRequestMethod{
                 sb.append(castedChar);
             }
 
-            response = sb.toString();
+            // Setting the request data and the response data.
+            // This should take most of the time.
+            resObj.setRequestBody(sb.toString());
+            response = resObj.getResponse();
+
+            // Development, should remove.
             System.out.println(sb.toString());
+            
             OutputStream os = ex.getResponseBody();
             ex.sendResponseHeaders(200, response.length());
             os.write(response.getBytes());
