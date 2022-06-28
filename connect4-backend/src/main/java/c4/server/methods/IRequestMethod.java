@@ -1,8 +1,10 @@
 package c4.server.methods;
 
 import java.io.IOException;
-import c4.server.response.Endpoint;
+
 import com.sun.net.httpserver.HttpExchange;
+
+import c4.server.endpoint.Endpoint;
 
 /**
  * Base Method command for other Request Method Types.

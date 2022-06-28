@@ -4,8 +4,8 @@ import java.io.OutputStream;
 import java.io.IOException;
 import com.sun.net.httpserver.HttpExchange;
 
-import c4.server.response.Endpoint;
-
+import c4.server.endpoint.Endpoint;
+// Transform this into singleton along with the POST method.
 public class Get implements IRequestMethod{
     public void respond(HttpExchange ex, Endpoint resObj) throws IOException{
         try{

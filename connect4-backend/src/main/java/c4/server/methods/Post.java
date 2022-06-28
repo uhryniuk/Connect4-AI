@@ -4,12 +4,14 @@ import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import c4.boardData.Board;
+import c4.server.endpoint.Endpoint;
+
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 
-import c4.server.response.Endpoint;
-
 public class Post implements IRequestMethod{
+    // Transform this into a Singleton, same with the GET Method.
+    // Perhaps make the IRequestMethod a singleton off the bat?
     public void respond(HttpExchange ex, Endpoint resObj) throws IOException{
         try{
             String response = resObj.getResponse();
@@ -23,12 +25,9 @@ public class Post implements IRequestMethod{
                 char castedChar = (char)currentChar;
                 sb.append(castedChar);
             }
-            String s = sb.toString();
-            int[] e = {1,2,3,4,5};
             
-            System.out.println(gson.toJson(e));
-            int[][] test = gson.fromJson(s, int[][].class);
-            System.out.println(test + " " + s);
+            int[][] test = gson.fromJson(sb.toString(), int[][].class);
+            System.out.println(test);
             for(int i = 0; i < test.length; i++){
                 for(int j = 0; j < test[i].length; j++){
                     System.out.print(""+test[i][j]+" ");

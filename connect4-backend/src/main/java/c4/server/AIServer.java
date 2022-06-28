@@ -1,7 +1,7 @@
 package c4.server;
 
 import com.sun.net.httpserver.HttpServer;
-import c4.server.response.Endpoint;
+import c4.server.endpoint.Endpoint;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
@@ -14,7 +14,7 @@ public class AIServer extends Thread{
     private HttpServer server;
     private int PORT = 8050;
     private ExecutorService threadPool;
-    private HashSet<String> endpoints = new HashSet<>();
+    private HashSet<Endpoint> endpoints = new HashSet<>();
     // private Thread serverThread;
 
     public AIServer(){
@@ -36,12 +36,16 @@ public class AIServer extends Thread{
 
     public void addEndpoint(Endpoint endpoint){
         Handler h = new Handler(endpoint);
-        endpoints.add(endpoint.getRoute()); // Add hanlding for collisions.
+        endpoints.add(endpoint); // Add hanlding for collisions.
         this.server.createContext(h.getRoute(), h);
     }
    
     public void start(){
         this.server.start();
+        System.out.println("The following endpoints are available: \nRoute:\t\tMethod:");
+        for(Endpoint e : this.endpoints){
+            System.out.println(e.getRoute()+"\t"+e.getMethod());
+        }
         // this.run();
     }
 

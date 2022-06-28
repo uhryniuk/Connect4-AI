@@ -1,4 +1,4 @@
-package c4.server.response;
+package c4.server.endpoint;
 
 public abstract class Endpoint {
     

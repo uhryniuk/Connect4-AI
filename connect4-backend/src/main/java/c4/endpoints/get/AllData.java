@@ -1,6 +1,6 @@
 package c4.endpoints.get;
 
-import c4.server.response.Endpoint;
+import c4.server.endpoint.Endpoint;
 
 /**
  * This is a test class, not a part of server framework.

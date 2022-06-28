@@ -1,11 +1,8 @@
 package c4.boardData;
 
-import java.util.ArrayList;
-
 public class Board {
-    public ArrayList<ArrayList<Integer>> board;
-    public Board(ArrayList<ArrayList<Integer>> board){
+    private int[][] board;
+    public Board(int[][] board){
         this.board = board;
-        
     }
 }

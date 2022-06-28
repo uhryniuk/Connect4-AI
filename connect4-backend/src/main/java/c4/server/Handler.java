@@ -2,9 +2,11 @@ package c4.server;
 
 import java.io.IOException;
 import com.sun.net.httpserver.HttpHandler;
+
+import c4.server.endpoint.Endpoint;
 import c4.server.methods.IRequestMethod;
 import c4.server.methods.MethodMapper;
-import c4.server.response.Endpoint;
+
 import com.sun.net.httpserver.HttpExchange;
 
 public class Handler implements HttpHandler {
@@ -23,7 +25,7 @@ public class Handler implements HttpHandler {
 
     public Handler(Endpoint endpoint){
         this.route = endpoint.getRoute();
-        this.requestMethod = MethodMapper.getMethod(endpoint.getMethod());
+        this.requestMethod = MethodMapper.parseMethod(endpoint.getMethod());
         this.endpoint = endpoint;
     }
 

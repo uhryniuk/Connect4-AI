@@ -34,7 +34,7 @@ public class MethodMapper {
      * @param method String of the desired method type.
      * @return Return the valid method type if there is any, GET is default.
      */
-    public static IRequestMethod getMethod(String method){
+    public static IRequestMethod parseMethod(String method){
         if(MethodMapper.getInstance().methodMap.get(method) != null){
             return MethodMapper.getInstance().methodMap.get(method);
         } 
