@@ -47,6 +47,24 @@ export default function Board(props){
         )
     }
 
+
+    /**
+     * Contacts API to get the AI's responding move.
+     * @param {} board 
+     * @param {*} setBoard 
+     * @returns 
+     */
+    async function getAIMove(board, setBoard) {
+        const arr = []
+        const newBoardResponse = await fetch("http://localhost:8050/api/board-move", {
+            method : "POST",
+            body : JSON.stringify(board),
+        })
+        const newBoard = await newBoardResponse.json()
+        setBoard(newBoard)
+        return newBoard
+    }
+
     /**
      * 
      * @param {*} type String
@@ -82,14 +100,21 @@ export default function Board(props){
         // Return our Unqiue Cell Object with contextual data
         return <div className={'cell-slot'} id={matrixIndex} onClick={() => {
             // Don't update board anymore if we have a winner.
-            if( !props.playerState.gameWinner ){
+            if( !props.playerState.gameWinner){
                 findAvailableCell(playerTurnInt, Number(cellIndexes[1]))
+                // check for winners and update the winner state.
             }
-            
-            // check for winners and update the winner state.
+            if(props.playerState.playerTurn == "player1"){
+                board = getAIMove(board, props.playerState.setBoard);
+            }
+
             props.playerState.setGameWinner(bh.winnerCheck(props.playerState.board))
+            // check for winners and update the winner state.
+            // props.playerState.setGameWinner(bh.winnerCheck(props.playerState.board))
             // Player makes their move (subject to change with AI)
-            props.playerState.setPlayerTurn(convertPlayerTurn())
+            // We won't need to convert anymore, since other opponent is AI.
+            // props.playerState.setPlayerTurn(convertPlayerTurn())
+            
         }}><div className={cellClass}></div></div>
     }   
     

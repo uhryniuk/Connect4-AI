@@ -9,7 +9,7 @@ public class AddData extends Endpoint {
     private int[][] board = null;
     public void setBoardData(int[][] board){this.board = board;}
     public AddData(){
-        setRoute("/add-data");
+        setRoute("/api/add-data");
         setMethod("POST");
         // Add more to describe what is expected from POST data?
     }

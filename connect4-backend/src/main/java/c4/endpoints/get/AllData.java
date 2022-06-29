@@ -8,7 +8,7 @@ import c4.server.endpoint.Endpoint;
 public class AllData extends Endpoint {
     public AllData(){
         // Not sure if these are even needed.
-        setRoute("/all-data");
+        setRoute("/api/all-data");
         setMethod("GET");
     }
 

@@ -18,7 +18,7 @@ export default function GameWindow(){
         ]
         return alerts[(Number(gameWinner)-1)]
     }
-
+    
     return (<div className='container'>
         <br />
         <Board playerState={{

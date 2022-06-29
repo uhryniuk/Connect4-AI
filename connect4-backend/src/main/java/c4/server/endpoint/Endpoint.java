@@ -2,54 +2,56 @@ package c4.server.endpoint;
 
 public abstract class Endpoint {
     
-    private String ROUTE;
-    private String METHOD;
-    private String RESPONSE = "";
-    private String REQUEST_BODY = "";
+    private String route;
+    private String method;
+    private String response = "";
+    private String requestBody = "";
 
     public Endpoint(){
         // Check if all of them are null
     }
 
     protected void setRoute(String route){
-        this.ROUTE = route;
+        this.route = route;
     }
     
     protected void setMethod(String method){
-        this.METHOD = method;
+        this.method = method;
     }
     
     protected void setResponse(String response){
-        this.RESPONSE = response;
+        this.response = response;
     }
 
     public void setRequestBody(String req){
-        this.REQUEST_BODY = req;
+        this.requestBody = req;
     }
     
     public String getRoute(){
-        return this.ROUTE;
+        return this.route;
     }
 
     public String getMethod(){
-        return this.METHOD;
+        return this.method;
     }
     
-    public abstract String getResponse();
-
-    public String getRequestBody(){
-        return this.REQUEST_BODY;
+    public String getResponse(){
+        return this.response;
     }
 
+    public String getRequestBody(){
+        return this.requestBody;
+    }
+
+    public void processData(){}
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
+        sb.append("Method:\t");
+        sb.append(this.method);
         sb.append("Route: ");
-        sb.append(this.ROUTE);
-        sb.append("Method: ");
-        sb.append(this.METHOD);
-        sb.append("Response: ");
-        sb.append(this.RESPONSE);
+        sb.append(this.route);
+        
 
         return sb.toString();
     }

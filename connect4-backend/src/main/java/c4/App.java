@@ -3,7 +3,9 @@ package c4;
 import java.util.Scanner;
 import c4.server.AIServer;
 import c4.endpoints.get.AllData;
+import c4.endpoints.get.BlankBoard;
 import c4.endpoints.post.AddData;
+import c4.endpoints.post.BoardMove;
 /**
  * This is just a testing driver class.
  */
@@ -17,6 +19,8 @@ public class App
 
         ais.addEndpoint(new AllData());
         ais.addEndpoint(new AddData());
+        ais.addEndpoint(new BlankBoard());
+        ais.addEndpoint(new BoardMove());
 
         Scanner kb = new Scanner(System.in);
         ais.start();

@@ -16,7 +16,8 @@ public class Post implements IRequestMethod{
         try{
             String response = resObj.getResponse();
             ex.getResponseHeaders().set("Content-Type", "application/json");
-            Gson gson = new Gson();
+            // Potentially move this.
+            ex.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
             InputStream is = ex.getRequestBody();
             
             int currentChar;
@@ -26,19 +27,11 @@ public class Post implements IRequestMethod{
                 sb.append(castedChar);
             }
             
-            int[][] test = gson.fromJson(sb.toString(), int[][].class);
-            System.out.println(test);
-            for(int i = 0; i < test.length; i++){
-                for(int j = 0; j < test[i].length; j++){
-                    System.out.print(""+test[i][j]+" ");
-                }
-                System.out.println("\t"+test[i]);
-            }
             // Setting the request data and the response data.
             // This should take most of the time.
             resObj.setRequestBody(sb.toString());
+            resObj.processData();
             response = resObj.getResponse();
-
             // Development, should remove.
             System.out.println(sb.toString());
             
