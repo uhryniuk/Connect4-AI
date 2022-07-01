@@ -73,7 +73,7 @@ public class Board {
      * Check the horizontal (x) axis of the matrix
      * @return Winner's String value.
      */
-    private String checkHorizontal(){
+    public String checkHorizontal(){
         // Current value stored at [i][j] index.
         String currentValue = "";
 
@@ -106,7 +106,7 @@ public class Board {
      * Checks the vertical (y) axis for winners.
      * @return Winner's string value, otherwise null.
      */
-    private String checkVertical(){
+    public String checkVertical(){
         // Current value stored at [i][j] index.
         String currentValue = "";
 
@@ -140,7 +140,7 @@ public class Board {
      * Checks the left and right digaonal directions for a winner.
      * @return Return the value of the winner, otherwise null
      */
-    private String checkDiagonal(){
+    public String checkDiagonal(){
         
         // Check starting from the top cells of the board
         for ( int j = 0; j < board[0].length; j++ )
@@ -230,6 +230,13 @@ public class Board {
     }
 
     // ----------- Getters & Setters --------------
+    // Getters
     public String[][] getBoard(){return this.board;}
     public ArrayList<int[]> getPossiblePositions(){return this.possiblePositions;}
+
+    // Setters
+    public void setBoard(String[][] newBoard){
+        this.board = newBoard;
+    }
+
 }
