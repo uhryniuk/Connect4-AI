@@ -1,5 +1,6 @@
 package c4.endpoints.post;
 
+import c4.boardAI.Board;
 import c4.server.endpoint.Endpoint;
 import java.util.Random;
 
@@ -17,6 +18,8 @@ public class BoardMove extends Endpoint{
         Random rand = new Random();
         int randRow = rand.nextInt(6);
         int randCol = rand.nextInt(7);
+
+        Board temp = new Board(board);
         // board[randRow][randCol] = "2";
 
         for(int i = 5; i >= 0; i--){

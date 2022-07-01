@@ -3,7 +3,8 @@ package c4.server.methods;
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.IOException;
-import c4.boardData.Board;
+
+import c4.boardAI.Board;
 import c4.server.endpoint.Endpoint;
 
 import com.google.gson.Gson;
@@ -27,11 +28,13 @@ public class Post implements IRequestMethod{
                 sb.append(castedChar);
             }
             
-            // Setting the request data and the response data.
-            // This should take most of the time.
+            // Setting Req dat
             resObj.setRequestBody(sb.toString());
+            // Business logic on the current request
             resObj.processData();
+            // Get the completed resposnse.
             response = resObj.getResponse();
+
             // Development, should remove.
             System.out.println(sb.toString());
             
