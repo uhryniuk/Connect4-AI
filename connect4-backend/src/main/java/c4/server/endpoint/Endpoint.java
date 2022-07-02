@@ -1,11 +1,14 @@
 package c4.server.endpoint;
 
+import java.util.ArrayList;
+
 public abstract class Endpoint {
     
     private String route;
     private String method;
     private String response = "";
     private String requestBody = "";
+    ArrayList<Header> headers = new ArrayList<>();
 
     public Endpoint(){
         // Check if all of them are null
@@ -41,6 +44,16 @@ public abstract class Endpoint {
 
     public String getRequestBody(){
         return this.requestBody;
+    }
+
+    public ArrayList<Header> getHeaders(){
+        return this.headers;
+    }
+
+    // Alternative functions
+
+    public void addHeader(String key, String value){
+        this.headers.add(new Header(key, value));
     }
 
     public void processData(){}

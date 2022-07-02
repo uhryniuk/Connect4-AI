@@ -10,13 +10,13 @@ public class BoardMove extends Endpoint{
     public BoardMove(){
         setRoute("/api/board-move");
         setMethod("POST");
+        addHeader("Content-Type", "applcation/json");
     }
 
     public String makeRandomMove(String boardJSON){
         Gson gson = new Gson();
         String[][] board = gson.fromJson(boardJSON, String[][].class);
         Random rand = new Random();
-        int randRow = rand.nextInt(6);
         int randCol = rand.nextInt(7);
 
         Board temp = new Board(board);

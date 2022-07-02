@@ -2,6 +2,7 @@ package c4.server.methods;
 
 import java.io.OutputStream;
 import java.io.IOException;
+import c4.server.endpoint.Header;
 import com.sun.net.httpserver.HttpExchange;
 
 import c4.server.endpoint.Endpoint;
@@ -9,8 +10,13 @@ import c4.server.endpoint.Endpoint;
 public class Get implements IRequestMethod{
     public void respond(HttpExchange ex, Endpoint resObj) throws IOException{
         try{
+
             String response = resObj.getResponse();
-            ex.getResponseHeaders().set("Content-Type", "application/json");
+            for ( Header header : resObj.getHeaders() )
+            {
+                ex.getResponseHeaders().set(header.getKey(), header.getValue());
+            }
+
             ex.sendResponseHeaders(200, response.length());
 
             OutputStream os = ex.getResponseBody();

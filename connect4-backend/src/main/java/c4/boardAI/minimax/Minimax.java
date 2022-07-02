@@ -17,7 +17,9 @@ public class Minimax {
      *   - Maxing of determined heuristics
      * - Follow with Minizming node
      *   - Again, determined by heuristics of the game.
-     * 
+     * - The player we are maximizing for, also needs to go first
+     *  - We follow by doing max -> min -> max -> min
+     *   - This follows for each layer of the tree.
      * 
      * 
      * 
@@ -49,7 +51,11 @@ public class Minimax {
     {
         this.currentBoard = newBoard;
     }
-
+    
+    private void minimax(Board board, int depth, boolean isMax)
+    {
+        
+    }
 
     
 

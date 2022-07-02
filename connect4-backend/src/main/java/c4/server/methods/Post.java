@@ -3,11 +3,7 @@ package c4.server.methods;
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.IOException;
-
-import c4.boardAI.Board;
 import c4.server.endpoint.Endpoint;
-
-import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 
 public class Post implements IRequestMethod{

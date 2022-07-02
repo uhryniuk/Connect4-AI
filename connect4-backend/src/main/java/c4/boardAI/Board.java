@@ -2,7 +2,6 @@ package c4.boardAI;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Optional;
 
 /**
  * Wrapper class for the Board Data Structure.
@@ -228,6 +227,39 @@ public class Board {
 
         return winner;
     }
+
+    /**
+     * Alter a cell in the board to make the AI move.
+     * @param board Board object to be sent abck to the client.
+     * @param i     Row index for the board object
+     * @param j     Column index for the board object.
+     */
+    public void makeMove(Board board, int i, int j)
+    {
+        String[][] boardObj = board.getBoard();
+        boardObj[i][j] = "2";
+        board.setBoard(boardObj);
+    }
+
+    /**
+     * Deep Copy over the underlying Board DS
+     * @param board Board data to be copied.
+     * @return New Board object with deep copy of the given board.
+     */
+    public Board copyBoard(Board board)
+    {
+        String[][] newBoardData = new String[6][7];
+        String[][] boardData = board.getBoard(); 
+        for ( int i = 0; i < newBoardData.length; i++ )
+        {
+            for ( int j = 0; j < newBoardData[0].length; j++ )
+            {
+                newBoardData[i][j] = boardData[i][j];
+            }
+        }
+        return new Board(newBoardData);
+    }
+
 
     // ----------- Getters & Setters --------------
     // Getters
