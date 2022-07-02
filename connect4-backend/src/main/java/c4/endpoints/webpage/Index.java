@@ -25,7 +25,6 @@ public class Index extends Endpoint{
             // Need aboslute path because compiled files are else in diff dir.
             String filePath = "/home/dyl/prog/Connect4-AI/connect4-backend/src/main/java/c4/endpoints/webpage/index.html";
             File webpage = new File(filePath);
-            System.out.println(webpage.exists());
             if (!webpage.exists()) throw new FileNotFoundException("File does not exist.");
             
             Scanner file = new Scanner(webpage);
@@ -36,7 +35,6 @@ public class Index extends Endpoint{
                 sb.append(file.nextLine());
             }
             webpageData = sb.toString();
-            System.out.println(webpageData);
 
         } catch (FileNotFoundException e){
             webpageData = "page not found";

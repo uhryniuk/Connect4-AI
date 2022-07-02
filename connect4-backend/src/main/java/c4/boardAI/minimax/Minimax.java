@@ -54,7 +54,13 @@ public class Minimax {
     
     private void minimax(Board board, int depth, boolean isMax)
     {
+        // Validate the board
+        // did we find a winner? if so return this board.
+            // We want the "shortest winner path"
         
+        // IsMax, then do min layer next.
+
+        // Otherwise, do a max layer, have toiterate voer all of the possible outcomes.
     }
 
     

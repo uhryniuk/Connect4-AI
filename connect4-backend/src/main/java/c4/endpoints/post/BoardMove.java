@@ -6,6 +6,8 @@ import java.util.Random;
 
 import com.google.gson.Gson;
 
+import c4.boardAI.BoardValuator;
+
 public class BoardMove extends Endpoint{
     public BoardMove(){
         setRoute("/api/board-move");
@@ -20,6 +22,8 @@ public class BoardMove extends Endpoint{
         int randCol = rand.nextInt(7);
 
         Board temp = new Board(board);
+
+        new BoardValuator().calculate(temp, 0);
         // board[randRow][randCol] = "2";
 
         for(int i = 5; i >= 0; i--){
