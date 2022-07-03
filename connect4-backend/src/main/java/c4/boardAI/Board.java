@@ -16,7 +16,7 @@ public class Board {
         this.board = board;
         this.possiblePositions = new ArrayList<int[]>();
         this.generatePossiblePositions(this.possiblePositions);
-        this.winnerCheck();
+        // this.winnerCheck();
     }
 
     /**
@@ -64,7 +64,6 @@ public class Board {
         String winner = checkHorizontal();
         if ( winner == null ) winner = checkVertical();
         if ( winner == null ) winner = checkDiagonal();
-        System.out.println(winner);
         return winner != null ? winner : "";
     }
 
@@ -234,11 +233,11 @@ public class Board {
      * @param i     Row index for the board object
      * @param j     Column index for the board object.
      */
-    public void makeMove(Board board, int i, int j)
+    public void makeMove(int i, int j)
     {
-        String[][] boardObj = board.getBoard();
-        boardObj[i][j] = "2";
-        board.setBoard(boardObj);
+        // String[][] boardObj = this.board;
+        this.board[i][j] = "2";
+        // board.setBoard(boardObj);
     }
 
     /**
@@ -246,10 +245,10 @@ public class Board {
      * @param board Board data to be copied.
      * @return New Board object with deep copy of the given board.
      */
-    public Board copyBoard(Board board)
+    public Board copyBoard()
     {
         String[][] newBoardData = new String[6][7];
-        String[][] boardData = board.getBoard(); 
+        String[][] boardData = this.board; 
         for ( int i = 0; i < newBoardData.length; i++ )
         {
             for ( int j = 0; j < newBoardData[0].length; j++ )

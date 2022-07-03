@@ -5,8 +5,8 @@ import c4.server.endpoint.Endpoint;
 import java.util.Random;
 
 import com.google.gson.Gson;
-
-import c4.boardAI.BoardValuator;
+import c4.boardAI.minimax.Minimax;
+import c4.boardAI.BoardEvaluator;
 
 public class BoardMove extends Endpoint{
     public BoardMove(){
@@ -17,23 +17,24 @@ public class BoardMove extends Endpoint{
 
     public String makeRandomMove(String boardJSON){
         Gson gson = new Gson();
-        String[][] board = gson.fromJson(boardJSON, String[][].class);
-        Random rand = new Random();
-        int randCol = rand.nextInt(7);
+        String[][] boardObj = gson.fromJson(boardJSON, String[][].class);
+        // Random rand = new Random();
+        // int randCol = rand.nextInt(7);
 
-        Board temp = new Board(board);
+        Board board = new Board(boardObj);
 
-        new BoardValuator().calculate(temp, 0);
+        new BoardEvaluator().calculate(board, 0);
+        board = Minimax.getAI().getResponse(board);
         // board[randRow][randCol] = "2";
 
-        for(int i = 5; i >= 0; i--){
-            if (board[i][randCol].equals("0")){
-                board[i][randCol] = "2";
-                break;
-            }
-        }
-
-        return gson.toJson(board, String[][].class);
+        // for(int i = 5; i >= 0; i--){
+        //     if (board[i][randCol].equals("0")){
+        //         board[i][randCol] = "2";
+        //         break;
+        //     }
+        // }
+        
+        return gson.toJson(board.getBoard(), String[][].class);
     }
 
     @Override

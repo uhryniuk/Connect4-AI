@@ -4,7 +4,7 @@ package c4.boardAI;
  * We can check if there is a winner, but we need to derive a "value"
  * for the winner. (so called heuristics.)
  */
-public class BoardValuator {
+public class BoardEvaluator {
     
     /**
      * Calculates the value of the board on self defined criteria.\
@@ -21,14 +21,16 @@ public class BoardValuator {
         // Default Starting Value
         int max = 0;
 
-        max = Math.max(max, checkHorizontal(board.getBoard()));
-        max = Math.max(max, checkVertical(board.getBoard()));
-        max = Math.max(max, checkDiagonal(board.getBoard()));
+        int horizontal = checkHorizontal(board.getBoard());
+        int vertical = checkVertical(board.getBoard());
+        int diagonal = checkDiagonal(board.getBoard());
+
+        max = Math.max(max, horizontal);
+        max = Math.max(max, vertical);
+        max = Math.max(max, diagonal);
 
         return max;
     }
-
-
 
     /**
      * Returns max value seen for the AI  player in horizontal axis.
@@ -151,6 +153,7 @@ public class BoardValuator {
             {
                 depthCount++;
                 // Hardcode max depth that it will search for the time being
+                maxDepthCount = Math.max(maxDepthCount, depthCount);
                 maxDepthCount = Math.max(recurseDiagonal(row+1, column+1, depthCount, isLeft, board, maxDepthCount), maxDepthCount);
             
             } else {
@@ -160,11 +163,8 @@ public class BoardValuator {
         } else {
             if ( board[row][column].equals("2") )
             {
-                // increment the counter for depth/cells that match
                 depthCount++;
-                // Return if we have a winner
-                
-                    // Otherwise, recurse further to check
+                maxDepthCount = Math.max(maxDepthCount, depthCount);
                 maxDepthCount = Math.max(recurseDiagonal( row+1, column-1, depthCount, isLeft, board, maxDepthCount), maxDepthCount);
             } else { // Otherwise, keep recursing to search for new winner.
                 maxDepthCount = Math.max(recurseDiagonal(row+1, column-1, 1, isLeft, board,maxDepthCount), maxDepthCount);
