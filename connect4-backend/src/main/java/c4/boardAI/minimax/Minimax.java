@@ -58,50 +58,47 @@ public class Minimax {
 
     private int minimax(Board board, int depth, boolean isMax, int maxValue)
     {
-        // Validate the board
-        // did we find a winner? if so return this board.
-            // We want the "shortest winner path"
-        
-        // IsMax, then do min layer next.
-
-        // Otherwise, do a max layer, have toiterate voer all of the possible outcomes.
-        
-        
-        
-        // Hardcoding the number of layers to traverse
-        // 26 layers is quite insane, thats almost half the board so like 26! options
-        int ttt = new BoardEvaluator().calculate(board, depth);
-        if ( depth == 6 || maxValue >= 4 || ttt >= 4) // Try a lower lever.
-        {
+        // Set max recursion depth, increasing this sees further into the game.
+        if ( depth == 4 )
+        {   // If so return the max value, since we don't calculate any further.
             return maxValue;
         } else {
+            // Calculate the current value for this node at this depth.
             maxValue = new BoardEvaluator().calculate(board, depth);
         }
         
+        // Make list of boards with all possible moves.
         ArrayList<Board> boards = new ArrayList<>();
+
+        // Create all boards and add them to the list.
         for (int[] positions : board.getPossiblePositions()){
             Board newBoard = board.copyBoard();
             newBoard.makeMove(positions[0], positions[1]);
             boards.add(newBoard);
         }
 
+        // Create value map for each board.
         HashMap<Board, Integer> boardValueMap = new HashMap<>();
-
         for (Board b : boards)
         {
+            // Set currVal as a dumbie value.
             int currVal = -1;
+            // Maxing in minimax
             if ( isMax )
             {
+                // Do the recursion and add it to the map.
                 currVal = minimax(b, depth+1, false, maxValue);
                 boardValueMap.put(b,currVal);
     
+            // Minning in minimax
             } else {
                 currVal = minimax(b, depth+1, true, maxValue);
                 boardValueMap.put(b,currVal);
             }
-            if ( currVal >= 4 ) return currVal;
+            // if ( currVal >= 4 ) return currVal;
         }
 
+        // Find the minimum or maximum of each node layer.
         for (Board b : boardValueMap.keySet()){
             if ( isMax )
             {
@@ -112,6 +109,7 @@ public class Minimax {
             
         }
 
+        // Return the maximum after all computation.
         return maxValue;
     }
 
@@ -128,19 +126,17 @@ public class Minimax {
         HashMap<Board, Integer> map = new HashMap<>();
         for ( Board b : boards )
         {   
-            int boardValue = minimax(board, 1, true, 0);
-            if (boardValue >= 4){
-                return b;
-            }
-            
+            int boardValue = minimax(board, 1, false, 0);
             map.put(b, boardValue);
         }
-        int max = -1;
+        
+        int max = Integer.MIN_VALUE;
         Board returnBoard = null;
+
         for ( Board b : map.keySet())
         {
             int currentMax = map.get(b);
-            if ( currentMax >= 4 ) return b;
+            // if ( currentMax >= 4 ) return b;
             if ( currentMax > max ){
                 max = currentMax;
                 returnBoard = b;

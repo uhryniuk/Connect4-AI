@@ -6,6 +6,16 @@ package c4.boardAI;
  */
 public class BoardEvaluator {
     
+
+    private class Evaluation{
+        Board board = null;
+        int value = -1;
+        public Evaluation(Board board, int value){
+            this.board = board;
+            this.value = value;
+        }
+    }
+
     /**
      * Calculates the value of the board on self defined criteria.\
      * 
@@ -19,11 +29,16 @@ public class BoardEvaluator {
     public int calculate(Board board, int depth){
 
         // Default Starting Value
-        int max = 0;
+        int max = Integer.MIN_VALUE;
 
-        int horizontal = checkHorizontal(board.getBoard());
-        int vertical = checkVertical(board.getBoard());
-        int diagonal = checkDiagonal(board.getBoard());
+        int horizontal = checkHorizontal(board.getBoard()) * -depth;
+        int vertical = checkVertical(board.getBoard()) * -depth ;
+        int diagonal = checkDiagonal(board.getBoard()) * -depth;
+
+        System.out.println("Horizontal: "+horizontal);
+        System.out.println("Vertical: "+vertical);
+        System.out.println("Diagonal: "+diagonal);
+
 
         max = Math.max(max, horizontal);
         max = Math.max(max, vertical);
@@ -57,7 +72,6 @@ public class BoardEvaluator {
             }
         }
         
-        System.out.println("Horizontal: "+maxValueCount);
         return maxValueCount;
     }
 
@@ -89,7 +103,6 @@ public class BoardEvaluator {
             }
         }
 
-        System.out.println("Vertical: "+maxValueCount);
         return maxValueCount;
     }
 
@@ -127,7 +140,6 @@ public class BoardEvaluator {
             max = Math.max(verticalRight, max);
         }
 
-        System.out.println("Diagonal (all ways): "+max);
         return max;
     }
 
