@@ -2,35 +2,12 @@ package c4.boardAI.minimax;
 
 import c4.boardAI.Board;
 import c4.boardAI.BoardEvaluator;
+import c4.boardAI.Evaluation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Minimax {
-    
-    // Minimaxing notes:
-    /**
-     * This should potentially be a singleton.
-     * - One live isntance, that mutates with more and mroe requests.
-     * - Provides us with stable memory usage, instead of spikes.
-     * - For now, just get an AI working, regardless of speed.
-     *   - Performance enchancements are a late stage battle.
-     * 
-     * Minimax Theory:
-     * - Begin with a maxing node
-     *   - Maxing of determined heuristics
-     * - Follow with Minizming node
-     *   - Again, determined by heuristics of the game.
-     * - The player we are maximizing for, also needs to go first
-     *  - We follow by doing max -> min -> max -> min
-     *   - This follows for each layer of the tree.
-     * 
-     * 
-     * 
-     * 
-     * 
-     */
-
     
     private static Minimax ai = null; // Singleton of the AI, so memory is consistent.
     private Board currentBoard;
@@ -56,15 +33,17 @@ public class Minimax {
         this.currentBoard = newBoard;
     }
 
-    private int minimax(Board board, int depth, boolean isMax, int maxValue)
+    private Evaluation minimax(Board board, int depth, boolean isMax, int maxValue)
     {
+        boolean isWinner = maxValue >= 4;
         // Set max recursion depth, increasing this sees further into the game.
-        if ( depth == 4 )
+        if ( depth == 2 )
         {   // If so return the max value, since we don't calculate any further.
-            return maxValue;
+            return new Evaluation(board, maxValue, depth, isWinner);
         } else {
             // Calculate the current value for this node at this depth.
-            maxValue = new BoardEvaluator().calculate(board, depth);
+            Evaluation currentEval = new BoardEvaluator().calculate(board, depth);
+            maxValue = currentEval.getValue();
         }
         
         // Make list of boards with all possible moves.
@@ -87,12 +66,12 @@ public class Minimax {
             if ( isMax )
             {
                 // Do the recursion and add it to the map.
-                currVal = minimax(b, depth+1, false, maxValue);
+                currVal = Math.max(minimax(b, depth+1, false, maxValue).getValue(), maxValue);
                 boardValueMap.put(b,currVal);
     
             // Minning in minimax
             } else {
-                currVal = minimax(b, depth+1, true, maxValue);
+                currVal = Math.min(minimax(b, depth+1, true, maxValue).getValue(), maxValue);
                 boardValueMap.put(b,currVal);
             }
             // if ( currVal >= 4 ) return currVal;
@@ -109,8 +88,8 @@ public class Minimax {
             
         }
 
-        // Return the maximum after all computation.
-        return maxValue;
+        // Return the maximum after all computation.        
+        return new Evaluation(board, maxValue, depth, isWinner);
     }
 
 
@@ -123,27 +102,25 @@ public class Minimax {
             boards.add(newBoard);
         }
 
-        HashMap<Board, Integer> map = new HashMap<>();
+        ArrayList<Evaluation> evals = new ArrayList<>();
         for ( Board b : boards )
         {   
-            int boardValue = minimax(board, 1, false, 0);
-            map.put(b, boardValue);
+            Evaluation boardEval = minimax(b, 1, false, 0);
+            evals.add(boardEval);
         }
         
-        int max = Integer.MIN_VALUE;
-        Board returnBoard = null;
+        // Arbirarily assign the best board to begin with.
+        Evaluation bestBoard = evals.get(0);
 
-        for ( Board b : map.keySet())
+        for ( Evaluation e : evals)
         {
-            int currentMax = map.get(b);
-            // if ( currentMax >= 4 ) return b;
-            if ( currentMax > max ){
-                max = currentMax;
-                returnBoard = b;
+            if (e.getValue() >= bestBoard.getValue() && e.getDepth() <= bestBoard.getDepth())
+            {
+                bestBoard = e;
             }
 
         }
-        
-        return returnBoard;
+        System.out.println(evals.size());
+        return bestBoard.getBoard();
     }
 }

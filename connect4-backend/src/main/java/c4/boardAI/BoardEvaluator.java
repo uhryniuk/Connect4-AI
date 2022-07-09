@@ -5,16 +5,6 @@ package c4.boardAI;
  * for the winner. (so called heuristics.)
  */
 public class BoardEvaluator {
-    
-
-    private class Evaluation{
-        Board board = null;
-        int value = -1;
-        public Evaluation(Board board, int value){
-            this.board = board;
-            this.value = value;
-        }
-    }
 
     /**
      * Calculates the value of the board on self defined criteria.\
@@ -26,15 +16,20 @@ public class BoardEvaluator {
      * @param board Board to be evaluated
      * @return Integer value, higher is better, lower is worse.
      */
-    public int calculate(Board board, int depth){
+    public Evaluation calculate(Board board, int depth){
 
         // Default Starting Value
         int max = Integer.MIN_VALUE;
 
-        int horizontal = checkHorizontal(board.getBoard()) * -depth;
-        int vertical = checkVertical(board.getBoard()) * -depth ;
-        int diagonal = checkDiagonal(board.getBoard()) * -depth;
+        int h = checkHorizontal(board.getBoard());
+        int v = checkVertical(board.getBoard());
+        int d = checkDiagonal(board.getBoard());
 
+        int horizontal = h;
+        int vertical = v;
+        int diagonal = d;
+
+        System.out.println("\n"+"Depth: "+depth);
         System.out.println("Horizontal: "+horizontal);
         System.out.println("Vertical: "+vertical);
         System.out.println("Diagonal: "+diagonal);
@@ -43,8 +38,8 @@ public class BoardEvaluator {
         max = Math.max(max, horizontal);
         max = Math.max(max, vertical);
         max = Math.max(max, diagonal);
-
-        return max;
+        boolean isWinner = max >= 4;
+        return new Evaluation(board, max, depth, isWinner);
     }
 
     /**
