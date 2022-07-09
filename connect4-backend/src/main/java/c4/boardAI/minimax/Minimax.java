@@ -10,7 +10,6 @@ import java.util.HashMap;
 public class Minimax {
     
     private static Minimax ai = null; // Singleton of the AI, so memory is consistent.
-    private Board currentBoard;
 
     /* Constructor */
     private Minimax(){}
@@ -28,33 +27,20 @@ public class Minimax {
         return ai;
     }
 
-    public void updateBoard(Board newBoard)
-    {
-        this.currentBoard = newBoard;
-    }
-
     private Evaluation minimax(Board board, int depth, boolean isMax, int maxValue)
     {
         boolean isWinner = maxValue >= 4;
         // Set max recursion depth, increasing this sees further into the game.
-        if ( depth == 2 )
+        if ( depth == 3 )
         {   // If so return the max value, since we don't calculate any further.
             return new Evaluation(board, maxValue, depth, isWinner);
-        } else {
-            // Calculate the current value for this node at this depth.
-            Evaluation currentEval = new BoardEvaluator().calculate(board, depth);
-            maxValue = currentEval.getValue();
         }
+
+        Evaluation currentEval = new BoardEvaluator().calculate(board, depth);
+        maxValue = currentEval.getValue();
         
         // Make list of boards with all possible moves.
-        ArrayList<Board> boards = new ArrayList<>();
-
-        // Create all boards and add them to the list.
-        for (int[] positions : board.getPossiblePositions()){
-            Board newBoard = board.copyBoard();
-            newBoard.makeMove(positions[0], positions[1]);
-            boards.add(newBoard);
-        }
+        ArrayList<Board> boards = getBoardPositions(board);
 
         // Create value map for each board.
         HashMap<Board, Integer> boardValueMap = new HashMap<>();
@@ -74,7 +60,6 @@ public class Minimax {
                 currVal = Math.min(minimax(b, depth+1, true, maxValue).getValue(), maxValue);
                 boardValueMap.put(b,currVal);
             }
-            // if ( currVal >= 4 ) return currVal;
         }
 
         // Find the minimum or maximum of each node layer.
@@ -91,25 +76,46 @@ public class Minimax {
         // Return the maximum after all computation.        
         return new Evaluation(board, maxValue, depth, isWinner);
     }
-
-
-    public Board getResponse(Board board){
-        
+    
+    /**
+     * Get all boards based on all possible moves by AI
+     * @param board Base board to see all possible moves.
+     * @return List of all new possible boards.
+     */
+    private ArrayList<Board> getBoardPositions(Board board)
+    {
         ArrayList<Board> boards = new ArrayList<>(); 
         for (int[] positions : board.getPossiblePositions()){
             Board newBoard = board.copyBoard();
             newBoard.makeMove(positions[0], positions[1]);
             boards.add(newBoard);
         }
+        return boards;
+    }
 
+    /**
+     * Generates and gets all possible board generations of current layer
+     * @param boards All of the boards of the current layer
+     * @return List of evaluated baords.
+     */
+    private ArrayList<Evaluation> getBoardEvaluations(ArrayList<Board> boards)
+    {
         ArrayList<Evaluation> evals = new ArrayList<>();
         for ( Board b : boards )
         {   
             Evaluation boardEval = minimax(b, 1, false, 0);
             evals.add(boardEval);
         }
-        
-        // Arbirarily assign the best board to begin with.
+        return evals;
+    }
+
+    /**
+     * Obtains the highest valued board based on heuristic value and depth
+     * @param evals List of all evalutaions in current layer.
+     * @return Best possible evaluation.
+     */
+    private Evaluation getBestEvaluation(ArrayList<Evaluation> evals)
+    {
         Evaluation bestBoard = evals.get(0);
 
         for ( Evaluation e : evals)
@@ -120,7 +126,17 @@ public class Minimax {
             }
 
         }
-        System.out.println(evals.size());
-        return bestBoard.getBoard();
+        return bestBoard;
+    }
+
+    /**
+     * Response from the Minimax AI
+     * @param board Current board state since the player made their move.
+     * @return 
+     */
+    public Board getResponse(Board board){
+        ArrayList<Board> boards = getBoardPositions(board);
+        ArrayList<Evaluation> evals = getBoardEvaluations(boards);
+        return getBestEvaluation(evals).getBoard();
     }
 }

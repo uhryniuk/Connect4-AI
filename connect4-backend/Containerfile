@@ -1,0 +1,15 @@
+# using uses base image
+# Copies the source directory
+# copies the POM over
+# run maven
+# Set java command on startup of container.
+
+FROM docker.io/maven as builder
+
+COPY src src
+
+COPY pom.xml pom.xml
+
+RUN mvn clean compile assembly:single
+
+CMD java -jar "./target/connect4-backend-1.0-SNAPSHOT-jar-with-dependencies.jar" 

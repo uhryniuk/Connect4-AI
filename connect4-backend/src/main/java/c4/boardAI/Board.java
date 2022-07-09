@@ -16,7 +16,6 @@ public class Board {
         this.board = board;
         this.possiblePositions = new ArrayList<int[]>();
         this.generatePossiblePositions(this.possiblePositions);
-        // this.winnerCheck();
     }
 
     /**
@@ -52,15 +51,6 @@ public class Board {
 
     public String winnerCheck()
     {
-        // TODO: Keep the below as testing, until automated tests can be made.
-        // String winner = checkHorizontal();
-        // if ( winner != null ) return winner; System.out.println("HIT! - Horizontal");
- 
-        // winner = checkVertical();
-        // if ( winner != null ) return winner; System.out.println("HIT! - Vertical");
-
-        // String winner2 = checkDiagonal();
-        // if ( winner2 != null ) System.out.println("HIT! - Diagonal");
         String winner = checkHorizontal();
         if ( winner == null ) winner = checkVertical();
         if ( winner == null ) winner = checkDiagonal();
