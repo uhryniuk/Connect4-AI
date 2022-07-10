@@ -6,6 +6,9 @@ package c4.boardAI;
  */
 public class BoardEvaluator {
 
+    /* Constructor */
+    public BoardEvaluator(){}
+
     /**
      * Calculates the value of the board on self defined criteria.\
      * 
@@ -33,12 +36,17 @@ public class BoardEvaluator {
         d = Math.max(d, checkDiagonal(board.getBoard(), "1")+1);
 
         // Final maxing process
-        max = Math.max(max, h);
+        // max = Math.max(max, h);
         max = Math.max(max, v);
+        max = Math.max(max, h);
         max = Math.max(max, d);
 
         boolean isWinner = max >= 4;
         return new Evaluation(board, max, depth, isWinner);
+    }
+
+    public Evaluation calculate(Evaluation eval){
+        return this.calculate(eval.getBoard(), eval.getDepth());
     }
 
     /**

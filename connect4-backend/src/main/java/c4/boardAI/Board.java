@@ -223,11 +223,9 @@ public class Board {
      * @param i     Row index for the board object
      * @param j     Column index for the board object.
      */
-    public void makeMove(int i, int j)
+    public void makeMove(int i, int j, boolean isAI)
     {
-        // String[][] boardObj = this.board;
-        this.board[i][j] = "2";
-        // board.setBoard(boardObj);
+        this.board[i][j] = isAI ? "2" : "1";
     }
 
     /**
