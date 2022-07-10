@@ -30,9 +30,6 @@ public class Post implements IRequestMethod{
             resObj.processData();
             // Get the completed resposnse.
             response = resObj.getResponse();
-
-            // Development, should remove.
-            System.out.println(sb.toString());
             
             OutputStream os = ex.getResponseBody();
             ex.sendResponseHeaders(200, response.length());

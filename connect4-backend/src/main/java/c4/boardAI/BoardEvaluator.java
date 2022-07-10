@@ -1,5 +1,7 @@
 package c4.boardAI;
 
+import java.util.ArrayList;
+
 /**
  * We can check if there is a winner, but we need to derive a "value"
  * for the winner. (so called heuristics.)
@@ -26,20 +28,31 @@ public class BoardEvaluator {
 
         int max = Integer.MIN_VALUE;
 
-        int h = checkHorizontal(board.getBoard(), "2");
-        int v = checkVertical(board.getBoard(), "2");
-        int d = checkDiagonal(board.getBoard(), "2");
+        // int h = checkHorizontal(board.getBoard(), "2");
+        // int v = checkVertical(board.getBoard(), "2");
+        // int d = checkDiagonal(board.getBoard(), "2");
 
-        // Add 1 for prioritizing the blocking of player moves.
-        h = Math.max(h, checkHorizontal(board.getBoard(), "1")+1);
-        v = Math.max(v, checkVertical(board.getBoard(), "1")+1);
-        d = Math.max(d, checkDiagonal(board.getBoard(), "1")+1);
+        // System.out.println("AI:     ");
+        // System.out.println("H: "+h);
+        // System.out.println("V: "+v);
+        // System.out.println("D: "+d);
 
-        // Final maxing process
+        // // Add 1 for prioritizing the blocking of player moves.
+        // h = Math.max(h, checkHorizontal(board.getBoard(), "1"));
+        // v = Math.max(v, checkVertical(board.getBoard(), "1"));
+        // d = Math.max(d, checkDiagonal(board.getBoard(), "1"));
+
+        // System.out.println("Player:     ");
+        // System.out.println("H: "+h);
+        // System.out.println("V: "+v);
+        // System.out.println("D: "+d+"\n");
+
+        // // Final maxing process
+        // // max = Math.max(max, h);
+        // max = Math.max(max, v);
         // max = Math.max(max, h);
-        max = Math.max(max, v);
-        max = Math.max(max, h);
-        max = Math.max(max, d);
+        // max = Math.max(max, d);
+        max = Math.max(max, Math.max(this.enhanceEval(board, depth, "2"), this.enhanceEval(board, depth, "2")));
 
         boolean isWinner = max >= 4;
         return new Evaluation(board, max, depth, isWinner);
@@ -49,6 +62,79 @@ public class BoardEvaluator {
         return this.calculate(eval.getBoard(), eval.getDepth());
     }
 
+    /**
+     * 
+     * @param Board Eval value generated from Board Checking
+     * @param String Eval value generated from Board Checking
+     * @return Enhanced heuristics value from more dynamic weighting system.
+     */
+    private int enhanceEval(Board board, int depth, String playerVal){
+        int h = checkHorizontal(board.getBoard(), playerVal);
+        int v = checkVertical(board.getBoard(), playerVal);
+        int d = checkDiagonal(board.getBoard(), playerVal);
+
+        // TODO Remap the value from 0,1,2,3,4+ to higher valued numbers for better positions.
+
+        int sum = 0;
+        // final int HORIZONTAL_VAL = 0;
+        // ArrayList<Integer> bv = getBoardValues(board, playerVal);
+        // for ( int i = 0; i < bv.size(); i++){
+        //     int val = bv.get(i);
+        //     if ( val >= 4 ){
+
+        //     } else switch (val) {
+        //         case 3: sum += val;
+        //             break;
+        //         case 2: ;
+        //             break;
+        //         case 1: ;
+        //             break;
+        //         default: 
+        //     }
+
+        //     // Add small priority to horizontal, for blocking.
+        //     if ( i ==  HORIZONTAL_VAL) sum += 1;
+
+        // }
+
+        sum = 0;
+        int[] fibNumbers = new int[] {0,2,3,5,8};
+        for ( int val : this.getBoardValues(board, playerVal) ){
+
+            switch( val ){
+                case 4 : sum += fibNumbers[val];
+                    break;
+                case 3 : sum += fibNumbers[val];
+                    break;
+                case 2 : sum += fibNumbers[val];
+                    break;
+                case 1 : sum += fibNumbers[val];
+                    break;
+                default: sum += fibNumbers[0];
+            }
+
+        }
+
+
+        // int sum = checkHorizontal(board.getBoard(), playerVal)
+        //         + checkVertical(board.getBoard(), playerVal)
+        //         + checkDiagonal(board.getBoard(), playerVal);
+        
+        return sum - depth;
+    }
+
+
+    private ArrayList<Integer> getBoardValues(Board board, String playerVal){
+        ArrayList<Integer> arr = new ArrayList<>();
+
+        final int PRIORITY_WEIGHT = 1;
+
+        arr.add(checkHorizontal(board.getBoard(), playerVal));
+        arr.add(checkVertical(board.getBoard(), playerVal));
+        arr.add(checkDiagonal(board.getBoard(), playerVal));
+
+        return arr;
+    }
     /**
      * Returns max value seen for the AI  player in horizontal axis.
      * @return Max value found.
@@ -74,7 +160,7 @@ public class BoardEvaluator {
             }
         }
         
-        return maxValueCount;
+        return maxValueCount >= 4 ? 4 : maxValueCount;
     }
 
     /**
@@ -105,7 +191,7 @@ public class BoardEvaluator {
             }
         }
 
-        return maxValueCount;
+        return maxValueCount >= 4 ? 4 : maxValueCount;
     }
 
 
@@ -185,7 +271,7 @@ public class BoardEvaluator {
             }
         }
 
-        return maxDepthCount;
+        return maxDepthCount >= 4 ? 4 : maxDepthCount;
     }
 
 }

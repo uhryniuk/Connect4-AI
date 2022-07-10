@@ -94,14 +94,15 @@ public class Minimax {
 
         boolean isAI = !isMax; // So isMax is not used in weird spots.
         ArrayList<Board> childBoards = this.getBoardPositions(currEval.getBoard(), isAI);
-
         ArrayList<Evaluation> childEvals = new ArrayList<>();
+        BoardEvaluator be = new BoardEvaluator();
+        
         for (Board b : childBoards){
-
+            
             if ( isMax ){
-                childEvals.add(minimax( new BoardEvaluator().calculate(b, currEval.getDepth()+1), false ));
+                childEvals.add(minimax( be.calculate(b, currEval.getDepth()+1), false ));
             } else {
-                childEvals.add(minimax( new BoardEvaluator().calculate(b, currEval.getDepth()+1), true ));
+                childEvals.add(minimax( be.calculate(b, currEval.getDepth()+1), true ));
             }
             
         }
