@@ -31,7 +31,7 @@ public class Minimax {
     {
         boolean isWinner = maxValue >= 4;
         // Set max recursion depth, increasing this sees further into the game.
-        if ( depth == 3 )
+        if ( depth == 5 )
         {   // If so return the max value, since we don't calculate any further.
             return new Evaluation(board, maxValue, depth, isWinner);
         }
