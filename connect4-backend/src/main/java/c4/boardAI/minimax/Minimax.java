@@ -96,7 +96,7 @@ public class Minimax {
         ArrayList<Board> childBoards = this.getBoardPositions(currEval.getBoard(), isAI);
         ArrayList<Evaluation> childEvals = new ArrayList<>();
         BoardEvaluator be = new BoardEvaluator();
-        
+
         for (Board b : childBoards){
             
             if ( isMax ){
@@ -110,6 +110,7 @@ public class Minimax {
         if ( isMax ){
             return this.getBestEvaluation(childEvals); 
         }
+        // return this.getBestEvaluation(childEvals); 
 
         return this.getWorstEvaluation(childEvals);
     }
@@ -142,7 +143,7 @@ public class Minimax {
         // Map all evals to their parent boards.
         for ( Board b : boards )
         {   
-            Evaluation currEval = minimax(new BoardEvaluator().calculate(b, 1), false);
+            Evaluation currEval = minimax(new BoardEvaluator().calculate(b, 1), true);
             evalMap.put(currEval, b);
             if ( bestEval == null ) 
                 bestEval = currEval;
@@ -168,7 +169,7 @@ public class Minimax {
 
         for ( Evaluation e : evals)
         {
-            if (e.getValue() >= bestBoard.getValue() && e.getDepth() <= bestBoard.getDepth())
+            if (e.getValue() > bestBoard.getValue() && e.getDepth() < bestBoard.getDepth())
             {
                 bestBoard = e;
             }
@@ -183,7 +184,7 @@ public class Minimax {
 
         for ( Evaluation e : evals)
         {
-            if (e.getValue() <= worstBoard.getValue() && e.getDepth() >= worstBoard.getDepth())
+            if (e.getValue() < worstBoard.getValue() && e.getDepth() > worstBoard.getDepth())
             {
                 worstBoard = e;
             }

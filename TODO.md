@@ -10,6 +10,32 @@
 -----------------------------------------------------------------------------------------
 # AI
 
+## Request for Rework on AI valuation methodology.
+- Continue using the Minimax
+- But change how we evaluate the board.
+    - Currently we can for the number of coins in:
+        1. Horizontal
+        2. Diagonal
+        3. Vertical
+
+    - Move towards the following:
+        - Possible spots to win
+        - Possible spots to block
+        - Shortest depth is priority
+        - Block takes precendence over 
+    
+### Radically different idea --- TODO TRY THIS!!!!!!!!! --- Serious rework though.
+- Scan the current board
+- Add all of the positions ([i][j]) to a list
+- Somehow add weights to each of the positions (3 is ebtter than 2, xyz)
+- Iterate over all potenial postions seeing if they correspond with possible locations on baord.
+- If so, pick the highest rated one
+    - Sum all the values when going through the depths
+        - Figure out how to handle the "min" laters
+
+
+
+
 ## Horizontal weirdness with AI 
 - Horizontal and Vertical heuritics seem to be broken.
 - horizontal is never valued it seems.
@@ -32,6 +58,15 @@
     - Currently we are using a better summing method to get a final value for the weiht of the board.
         - This still needs more research on which is better to use though.
         - So refer to the **active changes being made in the BoardEvaluator Class**
+
+
+    New Idea:
+    1. Convert the cell count -> fibonacci counterpart
+    2. Then apply a weighting factor and round up
+        - ex: 8 * 1.2 (weight factor for horizontal example)
+    3. Sum them up
+    4. Subtract the depth value from the sum
+        - Perhaps move this step elsewhere.
 
 
 ## Doesn't see "bad" moves
