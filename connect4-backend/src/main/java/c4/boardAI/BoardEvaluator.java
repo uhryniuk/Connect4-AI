@@ -10,7 +10,7 @@ public class BoardEvaluator {
 
     /* Constructor */
     public BoardEvaluator(){}
-
+    
     /**
      * Calculates the value of the board on self defined criteria.\
      * 
@@ -257,8 +257,12 @@ public class BoardEvaluator {
      * Checks for max value in the vertical axis.
      * @return MAx count for AI value.
      */
-    private int blockVertical(String[][] board, String playerVal){
-        // Current value stored at [i][j] index.
+    private int blockVertical(String[][] board, String playerVal, ArrayList<Integer[]> positions){
+        // Iterate over the Matrix twice
+            // First time normal direction,
+            // Second time in reverse
+            // this is to add missing indexes that we may have missed.
+            // 
 
         // Number of times value has been seen consecutively in the row.
         int valueCount = 0;

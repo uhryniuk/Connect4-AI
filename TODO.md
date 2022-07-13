@@ -32,6 +32,7 @@
 - If so, pick the highest rated one
     - Sum all the values when going through the depths
         - Figure out how to handle the "min" laters
+- Use the positions class to store the data when scraping for ideal slots.
 
 
 
