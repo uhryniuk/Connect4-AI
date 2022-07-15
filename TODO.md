@@ -48,6 +48,20 @@
 2. Rewrite the evaluation (transform the evalValue into derived value).
 3. Double check and potentially rewrite "getBestEval" function.
 
+#### Steps to be able to test the final rewrite
+- Notes:
+    - Consider returning a "Position Object" instead of the Integer to minimax when calling "calculate"
+    - 
+
+1. Create scanner for all directions
+    - Make sure you do reverse direction to account for missed ones.
+        - [x] Horizontal (Not tested)
+        - [x] Vertical (Not tested)
+        - [ ] Diagonal (not started, potentially major rewrite.)
+
+2. Rewrite the evaluation (transform the evalValue into derived value).
+3. Double check and potentially rewrite "getBestEval" function.
+
 
 
 
