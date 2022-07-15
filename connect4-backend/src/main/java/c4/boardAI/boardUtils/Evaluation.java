@@ -1,5 +1,4 @@
-package c4.boardAI;
-
+package c4.boardAI.boardUtils;
 
 /*
  * Special Data Class to convey loads of info down the call stack.

@@ -1,4 +1,4 @@
-package c4.boardAI;
+package c4.boardAI.boardUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;

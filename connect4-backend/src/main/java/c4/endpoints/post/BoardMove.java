@@ -1,8 +1,9 @@
 package c4.endpoints.post;
 
-import c4.boardAI.Board;
 import c4.server.endpoint.Endpoint;
 import com.google.gson.Gson;
+
+import c4.boardAI.boardUtils.Board;
 import c4.boardAI.minimax.Minimax;
 
 public class BoardMove extends Endpoint{

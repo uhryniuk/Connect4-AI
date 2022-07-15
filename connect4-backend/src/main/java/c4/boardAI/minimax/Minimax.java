@@ -1,8 +1,8 @@
 package c4.boardAI.minimax;
 
-import c4.boardAI.Board;
-import c4.boardAI.BoardEvaluator;
-import c4.boardAI.Evaluation;
+import c4.boardAI.boardUtils.Board;
+import c4.boardAI.boardUtils.BoardEvaluator;
+import c4.boardAI.boardUtils.Evaluation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
