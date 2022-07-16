@@ -1,6 +1,7 @@
 package c4.boardAI;
 
 import java.util.ArrayList;
+import c4.boardAI.boardUtils.*;
 
 /**
  * We can check if there is a winner, but we need to derive a "value"

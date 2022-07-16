@@ -62,6 +62,9 @@
 2. Rewrite the evaluation (transform the evalValue into derived value).
 3. Double check and potentially rewrite "getBestEval" function.
 
+- Nearly done, for some reason the diagonal is failing...
+    - Investigate further.
+
 #### Steps to be able to test the final rewrite
 - Notes:
     - Consider returning a "Position Object" instead of the Integer to minimax when calling "calculate"
