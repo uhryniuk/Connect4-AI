@@ -247,6 +247,22 @@ public class Board {
         return new Board(newBoardData);
     }
 
+    /**
+     * Get all the possible moves that can be made from the origin board.
+     * @param isAI Whether we are looking for AI moves or for Player moves.
+     * @return List of all possible moves.
+     */
+    public ArrayList<Board> generatePossibleMoves(boolean isAI){
+        ArrayList<Board> boards = new ArrayList<>(); 
+        Board boardWrapper = new Board(board);
+        for (int[] positions : boardWrapper.getPossiblePositions()){
+            Board newBoard = boardWrapper.copyBoard();
+            newBoard.makeMove(positions[0], positions[1], isAI);
+            boards.add(newBoard);
+        }
+        return boards;
+    }
+
 
     // ----------- Getters & Setters --------------
     // Getters

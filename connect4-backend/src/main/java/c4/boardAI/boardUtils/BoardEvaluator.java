@@ -1,8 +1,7 @@
 package c4.boardAI.boardUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import c4.boardAI.boardUtils.*;
 
 /**
  * We can check if there is a winner, but we need to derive a "value"
@@ -12,7 +11,7 @@ public class BoardEvaluator {
 
     /* Constructor */
     public BoardEvaluator(){}
-
+    
     /**
      * Calculates the value of the board on self defined criteria.\
      * 
@@ -23,7 +22,7 @@ public class BoardEvaluator {
      * @param board Board to be evaluated
      * @return Integer value, higher is better, lower is worse.
      */
-    public Evaluation calculate(Board board, int depth){
+    public Evaluation evaluate(Board board, int depth){
 
         // This maxing process below can be optimzied
         // This is just for POC.
@@ -33,11 +32,11 @@ public class BoardEvaluator {
         max = Math.max(max, Math.max(this.enhanceEval(board, depth, "2"), this.enhanceEval(board, depth, "1")));
 
         boolean isWinner = max >= 4;
-        return new Evaluation(board, max, depth, isWinner);
+        return new Evaluation(board, max, depth);
     }
 
     public Evaluation calculate(Evaluation eval){
-        return this.calculate(eval.getBoard(), eval.getDepth());
+        return this.evaluate(eval.getBoard(), eval.getDepth());
     }
 
     /**
@@ -52,10 +51,10 @@ public class BoardEvaluator {
         final int[] FIB_SEQ = new int[] {0,2,3,5,8};
         final float[] PRIORITY_FACTORS = new float[] {1.8f, 1.5f, 1.3f};
         
-        ArrayList<Position> boardValues = getBoardValues(board, playerVal);
+        ArrayList<Integer> boardValues = getBoardValues(board, playerVal);
         for ( int i = 0; i < boardValues.size(); i++ ){
 
-            int val = boardValues.get(i).getPositionValue();
+            int val = boardValues.get(i);
 
             // Guard condition,  creating bias for blocking the other user.
             if ( playerVal.equals("1") ){
@@ -63,6 +62,9 @@ public class BoardEvaluator {
             } else{
                 sum += (int) Math.ceil( (FIB_SEQ[val] - depth) * PRIORITY_FACTORS[i] );
             }
+
+            
+
         }
 
         // int sum = checkHorizontal(board.getBoard(), playerVal)
@@ -73,84 +75,55 @@ public class BoardEvaluator {
     }
 
 
-    private ArrayList<Position> getBoardValues(Board board, String playerVal){
+    private ArrayList<Integer> getBoardValues(Board board, String playerVal){
+        ArrayList<Integer> arr = new ArrayList<>();
 
-        ArrayList<Position> positions = new ArrayList<>();
+        // The order in which these are added indicates their choice priority.
+        arr.add(placeHorizontal(board.getBoard(), playerVal));
+        arr.add(placeDiagonal(board.getBoard(), playerVal));
+        arr.add(placeVertical(board.getBoard(), playerVal));
 
-        scanHorizontalPositions(board.getBoard(), playerVal, positions);
-        scanVerticalPositions(board.getBoard(), playerVal, positions);
-        combinePositionLists(positions, scanDiagonalPositions(board.getBoard(), playerVal)); 
-        
-        for (Position p : positions){
-            System.out.println(p + " -> " + playerVal + " === ");
-        }
-        System.out.println("");
-
-        return positions;
-    }
-
-    public void combinePositionLists(ArrayList<Position> positions, ArrayList<Position> newPositions){
-        for (Position p : newPositions){
-            positions.add(p);
-        }
+        return arr;
     }
 
     /**
      * Returns max value seen for the AI  player in horizontal axis.
      * @return Max value found.
      */
-    private void scanHorizontalPositions(String[][] board, String playerVal, ArrayList<Position> positions){
+    private int placeHorizontal(String[][] board, String playerVal){
 
         // Number of times value has been seen consecutively in the row.
-        int forwardValueCount = 0;
-        int backwardValueCount = 0;
+        int valueCount = 0;
+        int maxValueCount = 0;
         // Loop over all indexes of the matrix. 
-        
         for ( int i = 0; i < board.length; i++ )
         {
             for ( int j = 0; j < board[0].length; j++ )
             {
                 // If we have matching value to currentValue, we increment.
                 if ( board[i][j].equals(playerVal) ) {
-                    forwardValueCount++;
-                    Position tempPosition = new Position(i, j, forwardValueCount);
-                    if ( forwardValueCount > 0 ){
-                        positions.add(tempPosition);
-                    }
+                    valueCount++;
+                    maxValueCount = Math.max(valueCount, maxValueCount);
                 }
                 else { // Otherwise, mark the new currentValue
-                    forwardValueCount = 0;
+                    valueCount = 0;
                 }
             }
-
-            for ( int j = board[0].length-1; j >= 0; j-- )
-            {
-                // If we have matching value to currentValue, we increment.
-                if ( board[i][j].equals(playerVal) ) {
-                    backwardValueCount++;
-                    Position tempPosition = new Position(i, j, backwardValueCount);
-                    if ( backwardValueCount > 0 ){
-                        positions.add(tempPosition);
-                    }
-                }
-                else { // Otherwise, mark the new currentValue
-                    backwardValueCount = 0;
-                }
-            }
-
         }
+        
+        return maxValueCount >= 4 ? 4 : maxValueCount;
     }
 
     /**
      * Checks for max value in the vertical axis.
-     * @return Max count for AI value.
+     * @return MAx count for AI value.
      */
-    private void scanVerticalPositions(String[][] board, String playerVal, ArrayList<Position> positions){
+    private int placeVertical(String[][] board, String playerVal){
         // Current value stored at [i][j] index.
 
         // Number of times value has been seen consecutively in the row.
-        int ascendValueCount = 0;
-        int descendValueCount = 0;
+        int valueCount = 0;
+        int maxValueCount = 0;
 
         // Loop over all indexes of the matrix. 
         for ( int j = 0; j < board[0].length; j++ )
@@ -159,33 +132,17 @@ public class BoardEvaluator {
             {
                 // If we have matching value to currentValue, we increment.
                 if ( board[i][j].equals(playerVal)  ) {
-                    ascendValueCount++;
-                    Position tempPosition = new Position(i, j, ascendValueCount);
-                    if ( ascendValueCount > 0 ){
-                        positions.add(tempPosition);
-                    }
+                    valueCount++;
+                    maxValueCount = Math.max(valueCount, maxValueCount);
                 }
                 else { // Otherwise, mark the new currentValue
-                    ascendValueCount = 0;
-                }
-            }
-
-            for ( int i = 0; i < board.length; i++ )
-            {
-                // If we have matching value to currentValue, we increment.
-                if ( board[i][j].equals(playerVal)  ) {
-                    descendValueCount++;
-                    Position tempPosition = new Position(i, j, descendValueCount);
-                    if ( descendValueCount > 0 ){
-                        positions.add(tempPosition);
-                    }
-                }
-                else { // Otherwise, mark the new currentValue
-                    descendValueCount = 0;
+                    
+                    valueCount = 0;
                 }
             }
         }
 
+        return maxValueCount >= 4 ? 4 : maxValueCount;
     }
 
 
@@ -193,18 +150,20 @@ public class BoardEvaluator {
      * Checks the left and right digaonal directions for a winner.
      * @return Return the value of the winner, otherwise null
      */
-    private ArrayList<Position> scanDiagonalPositions(String[][] board, String playerVal){
+    private int placeDiagonal(String[][] board, String playerVal){
         
-        ArrayList<Position> newPositions = new ArrayList<>();
+        int max = 0;
 
         // Check starting from the top cells of the board
         for ( int j = 0; j < board[0].length; j++ )
         {
             // Ex Path: 0,0 -> 1,1 -> 2,2
-            combinePositionLists(newPositions, recurseDiagonalPostions(new int[] {0+1, j+1}, 1, true, board, playerVal)); 
-            
+            int horizontalLeft = recurseDiagonal(0+1, j+1, 1, true, board, 0, playerVal);
+            max = Math.max(horizontalLeft, max);
+
             // Ex Path: 0,6 -> 1,5 -> 2,4
-            // combinePositionLists(newPositions, recurseDiagonalPostions(new int[] {0+1, j-1}, 1, false, board, playerVal)); 
+            int horizontalRight = recurseDiagonal(0+1, j-1, 1, false, board, 0, playerVal);
+            max = Math.max(horizontalRight, max);
 
         }
 
@@ -212,52 +171,202 @@ public class BoardEvaluator {
         for ( int i = 0; i < board.length; i++ )
         {
             // Ex Path: 2,0 -> 3,1 -> 4,2
-            // combinePositionLists(newPositions, recurseDiagonalPostions(new int[] {i+1, 0-1}, 1, true, board, playerVal)); 
-                       
+            int verticalLeft = recurseDiagonal(i+1, 0+1, 1, true, board, 0, playerVal);
+            max = Math.max(verticalLeft, max);            
+
             // Ex Path: 2,6 -> 3,5 -> 4,4
-            // combinePositionLists(newPositions, recurseDiagonalPostions(new int[] {i+1, 6-1}, 1, false, board, playerVal));
-            
+            int verticalRight = recurseDiagonal(i+1, 6-1, 1, false, board, 0, playerVal);
+            max = Math.max(verticalRight, max);
         }
 
-        return newPositions;
+        return max;
     }
 
-    
-    private ArrayList<Position> recurseDiagonalPostions(int[] position, int depthCount, boolean isLeft, String[][] board, String playerVal)
+    /**
+     * Recursive function to DFS all the nodes diagonally.
+     * @param value      Current Value we are searching to match
+     * @param row        Current row
+     * @param column     Current column
+     * @param depthCount Depth count for number of cells in current match.
+     * @return Return the current value of the winner, otherwise null.
+     */
+    private int recurseDiagonal(int row, int column, int depthCount, boolean isLeft, String[][] board, int maxDepthCount, String playerVal)
     {
-        
-        ArrayList<Position> newPositions = new ArrayList<>();
-        final int row = position[0];
-        final int column = position[1];
-
         // Base case for out of bounds
-        
-        if ( (row < board.length || row >= 0 || column < board[0].length || column >= 0) && depthCount > 0 )
+        if (row >= board.length || row < 0 || column >= board[0].length || column < 0)
         {
+            return maxDepthCount;
+        }
 
-            newPositions.add(new Position(row, column, depthCount));
-
-            if ( isLeft )
-            {
+        if ( isLeft )
+        {
             if ( board[row][column].equals(playerVal) )
-            {   
-                combinePositionLists(newPositions, recurseDiagonalPostions(new int[] {row+1, column+1}, depthCount+1, isLeft, board, playerVal));;
+            {
+                depthCount++;
+                // Hardcode max depth that it will search for the time being
+                maxDepthCount = Math.max(maxDepthCount, depthCount);
+                maxDepthCount = Math.max(recurseDiagonal(row+1, column+1, depthCount, isLeft, board, maxDepthCount, playerVal), maxDepthCount);
             
             } else {
-                combinePositionLists(newPositions, recurseDiagonalPostions(new int[] {row+1, column+1}, 1, isLeft, board, playerVal));;
+                maxDepthCount = Math.max(recurseDiagonal(row+1, column+1, 1, isLeft, board, maxDepthCount, playerVal), maxDepthCount);
             }
 
-            } else {
-                if ( board[row][column].equals(playerVal) )
-                {
-                    combinePositionLists(newPositions, recurseDiagonalPostions(new int[] {row+1, column-1}, depthCount+1, isLeft, board, playerVal));;
-                } else { // Otherwise, keep recursing to search for new winner.
-                    combinePositionLists(newPositions, recurseDiagonalPostions(new int[] {row+1, column-1}, 1, isLeft, board, playerVal));;
+        } else {
+            if ( board[row][column].equals(playerVal) )
+            {
+                depthCount++;
+                maxDepthCount = Math.max(maxDepthCount, depthCount);
+                maxDepthCount = Math.max(recurseDiagonal( row+1, column-1, depthCount, isLeft, board, maxDepthCount, playerVal), maxDepthCount);
+            } else { // Otherwise, keep recursing to search for new winner.
+                maxDepthCount = Math.max(recurseDiagonal(row+1, column-1, 1, isLeft, board,maxDepthCount, playerVal), maxDepthCount);
+            }
+        }
+
+        return maxDepthCount >= 4 ? 4 : maxDepthCount;
+    }
+
+
+    /**
+     * Returns max value seen for the AI  player in horizontal axis.
+     * @return Max value found.
+     */
+    private int blockHorizontal(String[][] board, String playerVal){
+
+        // Number of times value has been seen consecutively in the row.
+        int valueCount = 0;
+        int maxValueCount = 0;
+        // Loop over all indexes of the matrix. 
+        for ( int i = 0; i < board.length; i++ )
+        {
+            for ( int j = 0; j < board[0].length; j++ )
+            {
+                // If we have matching value to currentValue, we increment.
+                if ( board[i][j].equals(playerVal) ) {
+                    valueCount++;
+                    maxValueCount = Math.max(valueCount, maxValueCount);
+                }
+                else { // Otherwise, mark the new currentValue
+                    valueCount = 0;
+                }
+            }
+        }
+        
+        return maxValueCount >= 4 ? 4 : maxValueCount;
+    }
+
+    /**
+     * Checks for max value in the vertical axis.
+     * @return MAx count for AI value.
+     */
+    private int blockVertical(String[][] board, String playerVal, ArrayList<Integer[]> positions){
+        // Iterate over the Matrix twice
+            // First time normal direction,
+            // Second time in reverse
+            // this is to add missing indexes that we may have missed.
+            // 
+
+        // Number of times value has been seen consecutively in the row.
+        int valueCount = 0;
+        int maxValueCount = 0;
+
+        // Loop over all indexes of the matrix. 
+        for ( int j = 0; j < board[0].length; j++ )
+        {
+            for ( int i = board.length-1; i >= 0; i-- )
+            {
+                // If we have matching value to currentValue, we increment.
+                if ( board[i][j].equals(playerVal)  ) {
+                    valueCount++;
+                    maxValueCount = Math.max(valueCount, maxValueCount);
+                }
+                else { // Otherwise, mark the new currentValue
+                    
+                    valueCount = 0;
                 }
             }
         }
 
-        return newPositions;
+        return maxValueCount >= 4 ? 4 : maxValueCount;
+    }
+
+
+    /**
+     * Checks the left and right digaonal directions for a winner.
+     * @return Return the value of the winner, otherwise null
+     */
+    private int blockDiagonal(String[][] board, String playerVal){
+        
+        int max = 0;
+
+        // Check starting from the top cells of the board
+        for ( int j = 0; j < board[0].length; j++ )
+        {
+            // Ex Path: 0,0 -> 1,1 -> 2,2
+            int horizontalLeft = recurseDiagonal(0+1, j+1, 1, true, board, 0, playerVal);
+            max = Math.max(horizontalLeft, max);
+
+            // Ex Path: 0,6 -> 1,5 -> 2,4
+            int horizontalRight = recurseDiagonal(0+1, j-1, 1, false, board, 0, playerVal);
+            max = Math.max(horizontalRight, max);
+
+        }
+
+        // Check starting from the left and right sides of the board.
+        for ( int i = 0; i < board.length; i++ )
+        {
+            // Ex Path: 2,0 -> 3,1 -> 4,2
+            int verticalLeft = recurseDiagonal(i+1, 0+1, 1, true, board, 0, playerVal);
+            max = Math.max(verticalLeft, max);            
+
+            // Ex Path: 2,6 -> 3,5 -> 4,4
+            int verticalRight = recurseDiagonal(i+1, 6-1, 1, false, board, 0, playerVal);
+            max = Math.max(verticalRight, max);
+        }
+
+        return max;
+    }
+
+    /**
+     * Recursive function to DFS all the nodes diagonally.
+     * @param value      Current Value we are searching to match
+     * @param row        Current row
+     * @param column     Current column
+     * @param depthCount Depth count for number of cells in current match.
+     * @return Return the current value of the winner, otherwise null.
+     */
+    private int recurseBlockDiagonal(int row, int column, int depthCount, boolean isLeft, String[][] board, int maxDepthCount, String playerVal)
+    {
+        // Base case for out of bounds
+        if (row >= board.length || row < 0 || column >= board[0].length || column < 0)
+        {
+            return maxDepthCount;
+        }
+
+        if ( isLeft )
+        {
+            if ( board[row][column].equals(playerVal) )
+            {
+                depthCount++;
+                // Hardcode max depth that it will search for the time being
+                maxDepthCount = Math.max(maxDepthCount, depthCount);
+                maxDepthCount = Math.max(recurseDiagonal(row+1, column+1, depthCount, isLeft, board, maxDepthCount, playerVal), maxDepthCount);
+            
+            } else {
+                maxDepthCount = Math.max(recurseDiagonal(row+1, column+1, 1, isLeft, board, maxDepthCount, playerVal), maxDepthCount);
+            }
+
+        } else {
+            if ( board[row][column].equals(playerVal) )
+            {
+                depthCount++;
+                maxDepthCount = Math.max(maxDepthCount, depthCount);
+                maxDepthCount = Math.max(recurseDiagonal( row+1, column-1, depthCount, isLeft, board, maxDepthCount, playerVal), maxDepthCount);
+            } else { // Otherwise, keep recursing to search for new winner.
+                maxDepthCount = Math.max(recurseDiagonal(row+1, column-1, 1, isLeft, board,maxDepthCount, playerVal), maxDepthCount);
+            }
+        }
+
+        return maxDepthCount >= 4 ? 4 : maxDepthCount;
     }
 
 }

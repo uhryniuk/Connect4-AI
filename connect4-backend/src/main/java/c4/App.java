@@ -4,7 +4,6 @@ import java.util.Scanner;
 import c4.server.AIServer;
 import c4.endpoints.get.*;
 import c4.endpoints.post.*;
-import c4.endpoints.webpage.*;
 
 /**
  * This is just a testing driver class.
@@ -18,7 +17,6 @@ public class App
         // Thread serverThread = ais;s
 
         ais.addEndpoint(new AllData());
-        ais.addEndpoint(new Index());
         ais.addEndpoint(new BlankBoard());
         ais.addEndpoint(new BoardMove());
 
