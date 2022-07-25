@@ -18,4 +18,5 @@ public class Evaluation{
     public Board getBoard(){return this.board;}
     public int getValue(){return this.value;}
     public int getDepth(){return this.depth;}
+    public Board getParentBoard(){return this.board.getParentBoard();}
 }

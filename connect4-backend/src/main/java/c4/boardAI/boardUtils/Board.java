@@ -10,12 +10,20 @@ public class Board {
     
     private String[][] board;                   // Data Structure for board
     private ArrayList<int[]> possiblePositions; // Data Structure for all child nodes
+    private Board parentBoard = null;
 
     /* Constructor */
     public Board(String[][] board){
         this.board = board;
         this.possiblePositions = new ArrayList<int[]>();
         this.generatePossiblePositions(this.possiblePositions);
+    }
+
+    public Board(String[][] board, Board parentBoard){
+        this.board = board;
+        this.possiblePositions = new ArrayList<int[]>();
+        this.generatePossiblePositions(this.possiblePositions);
+        this.setParentBoard(parentBoard);
     }
 
     /**
@@ -268,10 +276,15 @@ public class Board {
     // Getters
     public String[][] getBoard(){return this.board;}
     public ArrayList<int[]> getPossiblePositions(){return this.possiblePositions;}
+    public Board getParentBoard(){return this.parentBoard;}
 
     // Setters
     public void setBoard(String[][] newBoard){
         this.board = newBoard;
+    }
+
+    public void setParentBoard(Board parentBoard){
+        this.parentBoard = parentBoard;
     }
 
 }

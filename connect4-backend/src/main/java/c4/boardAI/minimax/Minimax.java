@@ -10,7 +10,7 @@ public class Minimax {
     private static Minimax ai = null; // Singleton of the AI, so memory is consistent.
     private final static int MAX_RECURSION_DEPTH = 3;
     private final static int WIN_BOUNDARY = 4;
-    final int START_DEPTH = 0;
+    final int START_DEPTH = 1;
 
     /* Constructor */
     private Minimax(){}
@@ -32,10 +32,11 @@ public class Minimax {
         final boolean IS_AI = isMax;
 
         // Get all possiblities for next layer
-        ArrayList<Board> layer= board.generatePossibleMoves(IS_AI);
+        ArrayList<Board> layer = board.generatePossibleMoves(IS_AI);
+        layer.forEach( (b) -> b.setParentBoard(board.getParentBoard()) ); // Make sure the parentBoard is a root board.
 
         // Evaluate all of the layer, either best or worst
-        Evaluation nextMove = isMax ? getBestEvaluation(layer) : getWorstEvaluation(layer);
+        Evaluation nextMove = isMax ? getBestEvaluation(layer, depth) : getWorstEvaluation(layer, depth);
         
         // Recurse all possibilities
         if ( depth < MAX_RECURSION_DEPTH ){
@@ -62,25 +63,38 @@ public class Minimax {
 
     private Board getOptimalMove(Board board){
         // Always trying to get the AI's optimal move.
-        final boolean IS_MAX = true;
+        final boolean IS_MAX = false;
+        final boolean IS_AI = true;
         // Init minimax, finding best possible move.
-        return minimax(board, IS_MAX, START_DEPTH).getBoard();
+        ArrayList<Evaluation> nextMoves = new ArrayList<>();
+        ArrayList<Board> topLayer = board.generatePossibleMoves(IS_AI);
+
+        topLayer.forEach( (b) -> {
+            b.setParentBoard(b);
+            nextMoves.add(minimax(b, IS_MAX, START_DEPTH));
+        });
+
+        Evaluation optimalMove = nextMoves.get(0);
+        for ( Evaluation eval : nextMoves ){
+            if ( eval.getValue() > optimalMove.getValue() ) optimalMove = eval;
+        }
+
+        return optimalMove.getParentBoard();
     }
 
     public Board getResponse(Board board){
         return getOptimalMove(board);
     }
 
-    private ArrayList<Evaluation> evaluateBoards(ArrayList<Board> boards){
+    private ArrayList<Evaluation> evaluateBoards(ArrayList<Board> boards, String playerVal, int depth){
         ArrayList<Evaluation> evaluations = new ArrayList<>();
-        BoardEvaluator be = new BoardEvaluator();
-
-        boards.forEach( (board) -> evaluations.add(be.evaluate(board, 1)) );
+        boards.forEach( (board) -> evaluations.add(new BoardEvaluator(playerVal, depth, board).evaluate()) );
         return evaluations;
     }
 
-    private Evaluation getBestEvaluation(ArrayList<Board> boards){
-        ArrayList<Evaluation> evals = evaluateBoards(boards);
+    private Evaluation getBestEvaluation(ArrayList<Board> boards, int depth){
+        final String AI_VAL = "2";
+        ArrayList<Evaluation> evals = evaluateBoards(boards, AI_VAL, depth);
         Evaluation bestEval = evals.get(0);
 
         for ( Evaluation eval : evals ){
@@ -89,12 +103,13 @@ public class Minimax {
         return bestEval;
     }
 
-    private Evaluation getWorstEvaluation(ArrayList<Board> boards){
-        ArrayList<Evaluation> evals = evaluateBoards(boards);
+    private Evaluation getWorstEvaluation(ArrayList<Board> boards, int depth){
+        final String PLAYER_VAL = "1";
+        ArrayList<Evaluation> evals = evaluateBoards(boards, PLAYER_VAL, depth);
         Evaluation worstEval = evals.get(0);
         
         for ( Evaluation eval : evals ){
-            if ( eval.getValue() < worstEval.getValue() ) worstEval = eval;
+            if ( eval.getValue() > worstEval.getValue() ) worstEval = eval;
         }
         return worstEval;
     }

@@ -18,6 +18,12 @@ public class BoardMove extends Endpoint{
         String[][] boardObj = gson.fromJson(boardJSON, String[][].class);
         
         Board board = new Board(boardObj);
+        for (String[] s : boardObj){
+            for ( String ss : s){
+                System.out.print(ss+" ");
+            }
+            System.out.println("");
+        }
         board = Minimax.getAI().getResponse(board);
         
         return gson.toJson(board.getBoard(), String[][].class);
