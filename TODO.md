@@ -35,9 +35,16 @@
 - Use the positions class to store the data when scraping for ideal slots.
 
 ## LEFT OFF - JULY 24TH
-- WORKING ON REWRITING THE MINIMAX FROM SCRATCH.
-- THEN MOVE ONTO REWRITING THE BOARD_EVALUATOR
-- BOTH OF THESE NEED TO BE CLEANER AND TRY TO USE FUNCTIONAL PRINCIPLES.
+- Continue Rewriting the Board Evaluator for the vertical and horizontal dimensions
+- Pay attention to the Minimax though, as there may be many holes that need to be tested.
+- Some notes:
+    - Make sure to do, dual directional pass when scanning directions.
+        - This is done in horizontal.
+    - There is very rudementary valuing for which position to choose.
+        - This could be enhanced if need be.
+    - **Be mindful of the code you write.**
+        - Think thoroughly before you just run the code and forget about it.
+        - Try to utilize functional programming practices, monads and functors.
 
 
 ## Horizontal weirdness with AI 
