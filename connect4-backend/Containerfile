@@ -1,9 +1,3 @@
-# using uses base image
-# Copies the source directory
-# copies the POM over
-# run maven
-# Set java command on startup of container.
-
 FROM docker.io/maven as builder
 
 COPY src src

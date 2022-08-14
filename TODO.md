@@ -32,8 +32,27 @@
 - If so, pick the highest rated one
     - Sum all the values when going through the depths
         - Figure out how to handle the "min" laters
+- Use the positions class to store the data when scraping for ideal slots.
 
+## LEFT OFF - JULY 24TH
+- Continue Rewriting the Board Evaluator for the vertical and horizontal dimensions
+- Pay attention to the Minimax though, as there may be many holes that need to be tested.
+- Some notes:
+    - Make sure to do, dual directional pass when scanning directions.
+        - This is done in horizontal.
+    - There is very rudementary valuing for which position to choose.
+        - This could be enhanced if need be.
+    - **Be mindful of the code you write.**
+        - Think thoroughly before you just run the code and forget about it.
+        - Try to utilize functional programming practices, monads and functors.
 
+ ## LEFT OFF - JULY 28TH
+- Rewrote the minimaxer, I feel quite good about it.
+- Need to write the BoardEvaluator
+    - It should scrap all of the cells
+    - The assign a value to them as we see in stratzilla's c++ version.
+- Otherwise it should relatively be ready to go.
+- Consider switching out my webserver for spring, ol or something intersting...     
 
 
 ## Horizontal weirdness with AI 

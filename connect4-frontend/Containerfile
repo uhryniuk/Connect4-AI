@@ -9,7 +9,6 @@ COPY . .
 
 RUN ["npm", "run", "build"]
 
-# shouldn't have latest as this is bad form for server
 FROM docker.io/nginx:latest
 
 RUN rm /etc/nginx/conf.d/default.conf

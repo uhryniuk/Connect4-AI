@@ -8,7 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.io.IOException;
 import java.util.HashSet;
 
-public class AIServer extends Thread{
+public class AIServer extends Thread {
    
     // Make the server a singleton, this way easy to access all over.
     private HttpServer server;
