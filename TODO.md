@@ -46,6 +46,14 @@
         - Think thoroughly before you just run the code and forget about it.
         - Try to utilize functional programming practices, monads and functors.
 
+ ## LEFT OFF - JULY 28TH
+- Rewrote the minimaxer, I feel quite good about it.
+- Need to write the BoardEvaluator
+    - It should scrap all of the cells
+    - The assign a value to them as we see in stratzilla's c++ version.
+- Otherwise it should relatively be ready to go.
+- Consider switching out my webserver for spring, ol or something intersting...     
+
 
 ## Horizontal weirdness with AI 
 - Horizontal and Vertical heuritics seem to be broken.

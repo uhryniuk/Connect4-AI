@@ -2,15 +2,12 @@ package c4.boardAI.minimax;
 
 import java.util.ArrayList;
 
-import c4.boardAI.boardUtils.Board;
-import c4.boardAI.boardUtils.BoardEvaluator;
-import c4.boardAI.boardUtils.Evaluation;
+import c4.boardAI.Board;
 
 public class Minimax {
     private static Minimax ai = null; // Singleton of the AI, so memory is consistent.
-    private final static int MAX_RECURSION_DEPTH = 3;
+    private final static int DEPTH = 4;
     private final static int WIN_BOUNDARY = 4;
-    final int START_DEPTH = 1;
 
     /* Constructor */
     private Minimax(){}
@@ -28,89 +25,71 @@ public class Minimax {
         return ai;
     }
 
-    private Evaluation minimax(Board board, boolean isMax, int depth){
-        final boolean IS_AI = isMax;
-
-        // Get all possiblities for next layer
-        ArrayList<Board> layer = board.generatePossibleMoves(IS_AI);
-        layer.forEach( (b) -> b.setParentBoard(board.getParentBoard()) ); // Make sure the parentBoard is a root board.
-
-        // Evaluate all of the layer, either best or worst
-        Evaluation nextMove = isMax ? getBestEvaluation(layer, depth) : getWorstEvaluation(layer, depth);
-        
-        // Recurse all possibilities
-        if ( depth < MAX_RECURSION_DEPTH ){
-            // init next layer
-            ArrayList<Evaluation> nextLayer = new ArrayList<>();
-
-            // run minimax on each possible board.
-            layer.forEach( (currBoard) -> nextLayer.add( minimax(currBoard, !isMax, depth+1) ));
-
-            // Compare against current layer's best board.
-            for ( Evaluation eval : nextLayer ) {
-                // Either min or max, magic happens here.
-                if ( isMax ){
-                    if ( eval.getValue() > nextMove.getValue() ) nextMove = eval;
-                } else {
-                    if ( eval.getValue() < nextMove.getValue() ) nextMove = eval;
-                }
-            }
-        }
-        
-        // Returning the final best evaluation.
-        return nextMove;
-    }
-
-    private Board getOptimalMove(Board board){
-        // Always trying to get the AI's optimal move.
-        final boolean IS_MAX = false;
-        final boolean IS_AI = true;
-        // Init minimax, finding best possible move.
-        ArrayList<Evaluation> nextMoves = new ArrayList<>();
-        ArrayList<Board> topLayer = board.generatePossibleMoves(IS_AI);
-
-        topLayer.forEach( (b) -> {
-            b.setParentBoard(b);
-            nextMoves.add(minimax(b, IS_MAX, START_DEPTH));
-        });
-
-        Evaluation optimalMove = nextMoves.get(0);
-        for ( Evaluation eval : nextMoves ){
-            if ( eval.getValue() > optimalMove.getValue() ) optimalMove = eval;
-        }
-
-        return optimalMove.getParentBoard();
-    }
-
     public Board getResponse(Board board){
-        return getOptimalMove(board);
-    }
+        System.out.println("\nAI is thinking...");
 
-    private ArrayList<Evaluation> evaluateBoards(ArrayList<Board> boards, String playerVal, int depth){
-        ArrayList<Evaluation> evaluations = new ArrayList<>();
-        boards.forEach( (board) -> evaluations.add(new BoardEvaluator(playerVal, depth, board).evaluate()) );
-        return evaluations;
-    }
+        Board b = getOptimalMove(board);
 
-    private Evaluation getBestEvaluation(ArrayList<Board> boards, int depth){
-        final String AI_VAL = "2";
-        ArrayList<Evaluation> evals = evaluateBoards(boards, AI_VAL, depth);
-        Evaluation bestEval = evals.get(0);
-
-        for ( Evaluation eval : evals ){
-            if ( eval.getValue() > bestEval.getValue() ) bestEval = eval;
-        }
-        return bestEval;
-    }
-
-    private Evaluation getWorstEvaluation(ArrayList<Board> boards, int depth){
-        final String PLAYER_VAL = "1";
-        ArrayList<Evaluation> evals = evaluateBoards(boards, PLAYER_VAL, depth);
-        Evaluation worstEval = evals.get(0);
+        System.out.println("AI responded...");
         
-        for ( Evaluation eval : evals ){
-            if ( eval.getValue() > worstEval.getValue() ) worstEval = eval;
+        return b;
+    }
+
+    public Board getOptimalMove(Board board){
+        boolean isAI = true;
+        Evaluation e = minimax(board, DEPTH, isAI);
+        System.out.println("VALUE: "+e.getValue());
+        for (String[] s : e.getBoard().getBoard()){
+            for ( String ss : s ){
+                System.out.print(ss+" ");
+            }
+            System.out.println("");
         }
-        return worstEval;
+        System.out.println("------------------");
+        for (String[] s : e.getParentBoard().getBoard()){
+            for ( String ss : s ){
+                System.out.print(ss+" ");
+            }
+            System.out.println("");
+        }
+        return e.getBoard();
+    }
+
+    private Evaluation minimax(Board board, int depth, boolean isAI){
+        // Guard condition for depth.
+        if (depth <= 0) return BoardEvaluator.evaluate(board, isAI, depth); 
+        
+        // Always evaluate the current board;
+        ArrayList<Evaluation> evals = new ArrayList<>();
+        
+        // Evaluate all the moves, based on their type.
+        // Board typing may be redundant, make judgement later.
+        board.generatePossibleMoves(isAI)
+            .forEach( (move) -> {
+                // Assign parent boards based on depth!
+                if ( depth == DEPTH ) move.setParentBoard(move); 
+                else if ( depth < DEPTH ) move.setParentBoard(board.getParentBoard());
+                
+                evals.add(BoardEvaluator.evaluate(move, isAI, depth)); // evaluate based on player type
+                evals.add(minimax(move, depth-1, !isAI)); // Recurse finding next idea board.
+            });
+
+        return isAI ? maximumMove(evals) : minimumMove(evals);
+    }
+
+    private Evaluation maximumMove(ArrayList<Evaluation> evals){
+        Evaluation max = evals.get(0);
+        for (Evaluation e : evals){
+            if ( e.getValue() > max.getValue() ) max = e;
+        }
+        return max;
+    }
+
+    private Evaluation minimumMove(ArrayList<Evaluation> evals){
+        Evaluation min = evals.get(0);
+        for (Evaluation e : evals){
+            if ( e.getValue() < min.getValue() ) min = e;
+        }
+        return min;
     }
 }

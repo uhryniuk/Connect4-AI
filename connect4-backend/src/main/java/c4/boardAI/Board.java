@@ -1,4 +1,4 @@
-package c4.boardAI.boardUtils;
+package c4.boardAI;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -266,6 +266,9 @@ public class Board {
         for (int[] positions : boardWrapper.getPossiblePositions()){
             Board newBoard = boardWrapper.copyBoard();
             newBoard.makeMove(positions[0], positions[1], isAI);
+            newBoard.setParentBoard(
+                parentBoard != null ? parentBoard : null
+            );
             boards.add(newBoard);
         }
         return boards;
