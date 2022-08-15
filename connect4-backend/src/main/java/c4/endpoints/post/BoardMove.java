@@ -29,7 +29,6 @@ public class BoardMove extends Endpoint{
         System.out.print("\n\n");
 
         return gson.toJson(board.getParentBoard().getBoard(), String[][].class);
-        // return gson.toJson(board.getBoard(), String[][].class);
     }
 
     @Override

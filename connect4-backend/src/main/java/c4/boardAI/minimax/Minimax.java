@@ -7,7 +7,6 @@ import c4.boardAI.Board;
 public class Minimax {
     private static Minimax ai = null; // Singleton of the AI, so memory is consistent.
     private final static int DEPTH = 4;
-    private final static int WIN_BOUNDARY = 4;
 
     /* Constructor */
     private Minimax(){}
@@ -27,9 +26,7 @@ public class Minimax {
 
     public Board getResponse(Board board){
         System.out.println("\nAI is thinking...");
-
         Board b = getOptimalMove(board);
-
         System.out.println("AI responded...");
         
         return b;
@@ -37,22 +34,7 @@ public class Minimax {
 
     public Board getOptimalMove(Board board){
         boolean isAI = true;
-        Evaluation e = minimax(board, DEPTH, isAI);
-        System.out.println("VALUE: "+e.getValue());
-        for (String[] s : e.getBoard().getBoard()){
-            for ( String ss : s ){
-                System.out.print(ss+" ");
-            }
-            System.out.println("");
-        }
-        System.out.println("------------------");
-        for (String[] s : e.getParentBoard().getBoard()){
-            for ( String ss : s ){
-                System.out.print(ss+" ");
-            }
-            System.out.println("");
-        }
-        return e.getBoard();
+        return minimax(board, DEPTH, isAI).getBoard();
     }
 
     private Evaluation minimax(Board board, int depth, boolean isAI){
@@ -63,7 +45,6 @@ public class Minimax {
         ArrayList<Evaluation> evals = new ArrayList<>();
         
         // Evaluate all the moves, based on their type.
-        // Board typing may be redundant, make judgement later.
         board.generatePossibleMoves(isAI)
             .forEach( (move) -> {
                 // Assign parent boards based on depth!
