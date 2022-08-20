@@ -63,8 +63,8 @@ public class BoardEvaluator {
     private static int checkHorizontal(Board board, int[] pos, String player){
         ArrayList<Integer> subRowScores = new ArrayList<>();
         getHorizontalSlots(board, pos).forEach( (val) -> { subRowScores.add(checkRowScore(val)); });
-
         final int total = subRowScores.stream().reduce(0, Integer::sum);
+
         return total + checkVertical(board, pos, player);
     }
 
@@ -139,12 +139,29 @@ public class BoardEvaluator {
         String[][] board = b.getBoard();
         // We iterate over spreading the distance of the board.
         ArrayList<ArrayList<Integer>> positionLists = new ArrayList<>();
-        for ( int row = 5; row >= 0; row--){
-            for ( int idx = 0; idx < board[0].length-3; idx++ ){
+        for (int i = 0; i < 4; i++){
+            for(int j = 3; j < 6; j++){
                 ArrayList<Integer> tempList = new ArrayList<>();
+                // For each cell in the 4 slot iteration.
                 for ( int cell = 0; cell < 4; cell++ ){
-                    int curr = idx+cell;
-                    tempList.add(Integer.parseInt(board[row][curr]));
+                    // Get diagonal offset of indicies.
+                    int ith = j - cell;
+                    int jth = i + cell;
+                    tempList.add(Integer.parseInt(board[ith][jth]));
+                }
+                positionLists.add(tempList);
+            }
+        }
+
+        for (int i = 0; i < 4; i++){
+            for(int j = 0; j < 3; j++){
+                ArrayList<Integer> tempList = new ArrayList<>();
+                // For each cell in the 4 slot iteration.
+                for ( int cell = 0; cell < 4; cell++ ){
+                    // Get diagonal offset of indicies.
+                    int ith = j + cell;
+                    int jth = i + cell;
+                    tempList.add(Integer.parseInt(board[ith][jth]));
                 }
                 positionLists.add(tempList);
             }
