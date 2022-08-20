@@ -10,31 +10,44 @@ import c4.boardAI.Board;
  */
 public class BoardEvaluator {
 
-    public static Evaluation evaluate(Board board, boolean isMax, int depth){
-        final int boardValue = evaluteBoard(board, depth, isMax);
-        return new Evaluation(board, boardValue, isMax);
+    /**
+     * Board agnostic function to return an Evaluation of the board
+     * @param board Board to be evaluated
+     * @param isMax Whether the board is max or not.
+     * @return      Evalution containing, board, value of the board and isMax.
+     */
+    public static Evaluation evaluate(Board board){
+        final int boardValue = evaluteBoard(board);
+        return new Evaluation(board, boardValue);
     }
 
-    private static String booleanToPlayer(boolean isAI){
-        return isAI ? "2" : "1";
-    }
-
-    private static int findBestValue(ArrayList<Integer> values){
-        if ( values.size() == 1 ) return values.get(0);
-        final int val = values.remove(0), val2 = findBestValue(values);
-        return val > val2 ? val : val2;
-    }
-
-    private static int evaluteBoard(Board board, int depth, boolean isAI){
+    /**
+     * Begins evaluation process of the given board.
+     * @param board Board ot be evaluated.
+     * @return      Largest possible value found.
+     */
+    private static int evaluteBoard(Board board){
         ArrayList<Integer> boardValues = new ArrayList<>();
-        String player = booleanToPlayer(isAI);
-        board.getPossiblePositions()
-            .forEach((pos) -> { 
-                boardValues.add(checkHorizontal(board, pos, player)); 
-            });
-        return findBestValue(boardValues);
-    }    
+        boardValues.add(checkHorizontal(board)); 
+        return findHighestValue(boardValues);
+    } 
 
+    /**
+     * Iterates through list of values and finds the best board.
+     * @param values List of values that are unordered.
+     * @return       Highest possible value in the list.
+     */
+    private static int findHighestValue(ArrayList<Integer> values){
+        if ( values.size() == 1 ) return values.get(0);
+        // Pop off last value, recurse comparing values.
+        return Math.max( values.remove( (values.size()-1) ), findHighestValue(values) );
+    }
+
+    /**
+     * Create array of all scores found in a 4 slot section.
+     * @param subArray 4 Slot section that needs to be examined.
+     * @return         Heuristic integer based on values found in 4 slot section.
+     */
     private static int checkRowScore(ArrayList<Integer> subArray){
         // 0: zero, 1: player, 2: ai
         int[] counter = {0,0,0};
@@ -43,7 +56,7 @@ public class BoardEvaluator {
     }
 
     /**
-     * Sum scoring values together
+     * Sum scoring values together to evalute the actual section of the board.
      * @param     ai Number AI coins in slot 
      * @param player Number Player coins in slot
      * @param   zero Number of empty slots.
@@ -60,19 +73,25 @@ public class BoardEvaluator {
         return score;
     }
 
-    private static int checkHorizontal(Board board, int[] pos, String player){
+    /**
+     * Sums all horizontal 4 slot possible positions. 
+     * @param board  Board Object to search.
+     * @return List of list of positions.
+     */
+    private static int checkHorizontal(Board board){
         ArrayList<Integer> subRowScores = new ArrayList<>();
-        getHorizontalSlots(board, pos).forEach( (val) -> { subRowScores.add(checkRowScore(val)); });
+        getHorizontalSlots(board).forEach( (val) -> { subRowScores.add(checkRowScore(val)); });
         final int total = subRowScores.stream().reduce(0, Integer::sum);
 
-        return total + checkVertical(board, pos, player);
+        return total + checkVertical(board);
     }
 
     /**
      * Generates All possible 4 slot combos for the given row.
+     * @param board  Board Object to search.
      * @return List of list of positions.
      */
-    private static ArrayList<ArrayList<Integer>> getHorizontalSlots(Board b, int[] pos){
+    private static ArrayList<ArrayList<Integer>> getHorizontalSlots(Board b){
         String[][] board = b.getBoard();
         // We iterate over spreading the distance of the board.
         ArrayList<ArrayList<Integer>> positionLists = new ArrayList<>();
@@ -90,19 +109,20 @@ public class BoardEvaluator {
         return positionLists;
     }
 
-    private static int checkVertical(Board board, int[] pos, String player){
+    private static int checkVertical(Board board){
         ArrayList<Integer> subRowScores = new ArrayList<>();
-        getVerticalSlots(board, pos).forEach( (val) -> { subRowScores.add(checkRowScore(val)); });
+        getVerticalSlots(board).forEach( (val) -> { subRowScores.add(checkRowScore(val)); });
         final int total = subRowScores.stream().reduce(0, Integer::sum);
 
-        return total + checkDiagonal(board, pos, player);
+        return total + checkDiagonal(board);
     }
 
     /**
      * Generates All possible 4 slot combos for the given column.
+     * @param board  Board Object to search.
      * @return List of list of positions.
      */
-    private static ArrayList<ArrayList<Integer>> getVerticalSlots(Board b, int[] pos){
+    private static ArrayList<ArrayList<Integer>> getVerticalSlots(Board b){
         String[][] board = b.getBoard();
         // We iterate over spreading the distance of the board.
         ArrayList<ArrayList<Integer>> positionLists = new ArrayList<>();
@@ -123,19 +143,20 @@ public class BoardEvaluator {
         return positionLists;
     }
 
-    private static int checkDiagonal(Board board, int[] pos, String player){
+    private static int checkDiagonal(Board board){
         ArrayList<Integer> subRowScores = new ArrayList<>();
-        getDiagonalSlots(board, pos).forEach( (val) -> { subRowScores.add(checkRowScore(val)); });
+        getDiagonalSlots(board).forEach( (val) -> { subRowScores.add(checkRowScore(val)); });
         final int total = subRowScores.stream().reduce(0, Integer::sum);
 
         return total;
     }
 
     /**
-     * Generates All possible 4 slot combos for the given diagonal.
+     * Generates All possible 4 slot combos for the given diagonal column.
+     * @param board  Board Object to search.
      * @return List of list of positions.
      */
-    private static ArrayList<ArrayList<Integer>> getDiagonalSlots(Board b, int[] pos){
+    private static ArrayList<ArrayList<Integer>> getDiagonalSlots(Board b){
         String[][] board = b.getBoard();
         // We iterate over spreading the distance of the board.
         ArrayList<ArrayList<Integer>> positionLists = new ArrayList<>();

@@ -16,15 +16,14 @@ public class App
         AIServer ais = new AIServer();
         // Thread serverThread = ais;s
 
-        ais.addEndpoint(new AllData());
+        
         ais.addEndpoint(new BlankBoard());
         ais.addEndpoint(new BoardMove());
+        ais.start();
 
         Scanner kb = new Scanner(System.in);
-        ais.start();
-        // serverThread.run();
 
-        String word = "faart";
+        String word = "";
         while (!word.equals("kill")){
             word = kb.next();
             

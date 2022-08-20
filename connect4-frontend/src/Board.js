@@ -1,6 +1,6 @@
 import React from "react"
 import './index.css'
-import bh from './util/BoardHelpers'
+import bh from './lib/BoardHelpers'
 
 /**
  * getOpponentResponse()
@@ -11,20 +11,11 @@ import bh from './util/BoardHelpers'
 export default function Board(props){
     constructBoard(props.playerState.board)
 
-    /**
-     * Passes the play state to the other player.
-     * @returns String of current player
-     */
     function convertPlayerTurn(){
         if(props.playerState.playerTurn === 'player1') return 'player2'
         else return 'player1'
     }
 
-    /**
-     * 
-     * @param {6x7 matrix repersentation of the board} board 
-     * @returns Completed Board DOM JSX object to be rendered.
-     */
     function constructBoard(board){
 
         // Traverse 6 x 7 to construct the connect 4 board,
@@ -120,9 +111,7 @@ export default function Board(props){
     
     return(
         <div 
-            className={'board'}>{
-                constructBoard(props.playerState.board)
-            }
+            className={'board'}>{constructBoard(props.playerState.board)}
         </div>
     )
 }
