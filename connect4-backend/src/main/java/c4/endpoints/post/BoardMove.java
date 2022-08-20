@@ -17,19 +17,8 @@ public class BoardMove extends Endpoint{
         Gson gson = new Gson();
         String[][] boardObj = gson.fromJson(boardJSON, String[][].class);
         Board board = Minimax.getAI().getResponse(new Board(boardObj));
-        
-        // Send the parent board, as it's the best choice to make in first layer.
-        
-        for (String[] s : board.getParentBoard().getBoard()){
-            for ( String ss : s ){
-                System.out.print(ss+" ");
-            }
-            System.out.print("\n");
-        }
-        System.out.print("\n\n");
 
         return gson.toJson(board.getParentBoard().getBoard(), String[][].class);
-        // return gson.toJson(board.getBoard(), String[][].class);
     }
 
     @Override

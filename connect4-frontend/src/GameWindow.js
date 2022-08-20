@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 import Board from './Board';
-import bh from './util/BoardHelpers';
+import bh from './lib/BoardHelpers';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
+
 
 export default function GameWindow(){
     const [playerTurn, setPlayerTurn] = useState('player1') // just default for now
@@ -36,10 +37,12 @@ export default function GameWindow(){
                 setGameWinner(null)
             }}
             color="error"
-            variant='outlined'    
-        >Reset Game</Button>
+            variant='outlined'>
+            Reset Game
+        </Button>
         <br/>
         {gameCompletedAlert()}
+        {console.log(process.env.REACT_APP_MINIMAX_ENDPOINT)}
         </div>
     )
 }
