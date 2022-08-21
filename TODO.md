@@ -1,30 +1,36 @@
 # API
-- Delete all crumming endpoints.
-
-## Create Test endpoints.
-- Write simple endpoint to hit to make sure the server is alive.
-    - This endpoint can live on the "/" path from localhost.
-    - Since we are not using this as a webserver anymore.
+## Add Endpoints
+- For all the available types of AI to play against.
+- Add if the there is a winner to the current board.
 
 
 -----------------------------------------------------------------------------------------
-# AI
+# AI 
+- [x] Minimax 
+- [ ] Find next version too add. (doesn't need to be in java.)
+## Enhancements:
+- Find any performance improvements.
+    - Without adding multithreadings obviously.
+- Add a test suite (good learning experience)
+- Add a logger     (another good learning experience)
 
-## Status:
-- Somehow I complete it. Granted I used resources but I learned a lot I think.
-    - Especially with Arrays and iterating in interesting ways.
 
 -----------------------------------------------------------------------------------------
-# Frontend
+# Frontend - Starting complete rework...
 
-## The Winner system is boinked.
-- If the AI wins, the game does not halt.
-- Sometimes AI wins when there is 3 slots on the board.
+# Enahncement:
+    - Remove a lot of the useless modules (there is like million)
+    - Introduce a CSS library, I suck with CSS sooooooooo.
+    - Do we use a different framework...
+    - We could consider use typescript as well?
 
-
-## If AI responds with 4 in a row, game does not halt player
-- The game foes not throw a "loser" banner either.
-- Doesn't end game if the AI returns a winner
+# Start with:
+    1. Ground up rewrite following better React conventions.
+        a. Design what pages will exist.
+        b. Design of each page.
+        c. Build out some of the components
+        d. integrate with custom hooks
+        e. Add to library for checking for winners.
 
 -----------------------------------------------------------------------------------------
 # Clean
@@ -37,6 +43,7 @@
 ## Is there a repo I can use for my build images?
 - I can build my images, but is there a way to just get them on my server?
 - Do I have to jsut `scp` them from my device to server and put in podman folder
+    - DockerHub baby.
 
 -----------------------------------------------------------------------------------------
 # Build Cycle

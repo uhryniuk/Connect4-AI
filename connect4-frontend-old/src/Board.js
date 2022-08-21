@@ -1,6 +1,6 @@
 import React from "react"
 import './index.css'
-import bh from './lib/BoardHelpers'
+import bh from '../../connect4-frontend/src/lib/BoardHelpers'
 
 /**
  * getOpponentResponse()

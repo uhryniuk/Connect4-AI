@@ -1,0 +1,14 @@
+.board-container {
+    display: grid;
+    justify-content: center;
+}
+
+/* Temp Styles */
+.temp-reset-button {
+    user-select: none;
+}
+
+.temp-reset-button:hover {
+    color: greenyellow;
+    cursor: pointer;
+}

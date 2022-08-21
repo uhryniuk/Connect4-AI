@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Board from './Board';
-import bh from './lib/BoardHelpers';
+import bh from '../../connect4-frontend/src/lib/BoardHelpers';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
 
