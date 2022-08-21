@@ -13,6 +13,7 @@ function GameBoard(props){
                     key={i} 
                     colIndex={i} 
                     boardState={props.boardState}
+                    winnerState={props.winnerState}
                 />)
         }
         return arr;

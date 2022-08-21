@@ -5,7 +5,8 @@ import api from '../lib/api'
 
 const GameColumn = (props) => {
 
-    const [board, setBoard] = props.boardState;
+    const [board, setBoard]   = props.boardState;
+    const [winner, setWinner] = props.winnerState;
     const columnData = board[props.colIndex];
 
     function makeRows(){
@@ -21,6 +22,12 @@ const GameColumn = (props) => {
         return arr;
     }
 
+    function handleWinnerFound(){
+        // Not sure if this should do anything.
+        // Maybe it sends message or unlocks another features?
+        console.log('ADD SOME LOGIC HERE')
+    }
+
     function handleColumnClick() {
         for(let i = columnData.length-1; i >=0; i--){
             if (columnData[i] === '0'){
@@ -29,12 +36,12 @@ const GameColumn = (props) => {
                 break;
             }
         }
-        
-        api.getAgentMove([board, setBoard]);
+        api.getAgentMove([board, setBoard], [winner, setWinner]);
     };
     
+    const clickHandler = winner ? handleWinnerFound : handleColumnClick 
     return (
-        <div onClick={handleColumnClick} >
+        <div onClick={clickHandler} >
             {makeRows()}
         </div>
     )
