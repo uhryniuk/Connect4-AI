@@ -2,6 +2,8 @@
 ## Add Endpoints
 - For all the available types of AI to play against.
 - Add if the there is a winner to the current board.
+- Number of wins and losses the AI has had.
+    - This should change on the kind of AI it is.
 
 
 -----------------------------------------------------------------------------------------
@@ -32,10 +34,7 @@
         d. integrate with custom hooks
         e. Add to library for checking for winners.
 
------------------------------------------------------------------------------------------
-# Clean
-# Optimization
-# Testing
+
 
 -----------------------------------------------------------------------------------------
 # Deployment
@@ -43,16 +42,5 @@
 ## Is there a repo I can use for my build images?
 - I can build my images, but is there a way to just get them on my server?
 - Do I have to jsut `scp` them from my device to server and put in podman folder
-    - DockerHub baby.
-
------------------------------------------------------------------------------------------
-# Build Cycle
-## Write a simple, All in one build script
-- This should build both the frontend and the backend
-- Run all the tests for both of them
-- Build their podman images
-- Run them in containers
-- Test the containers
-- Shutdown the containers
-- Provide useful output such as time, and resources used for containers.
+    - *DockerHub baby.*
 

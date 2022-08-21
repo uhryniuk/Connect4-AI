@@ -1,4 +1,3 @@
-// TODO Write a Matrix Transposer for teh board.
 
 const makeBlankBoard = () => {
     let board = []

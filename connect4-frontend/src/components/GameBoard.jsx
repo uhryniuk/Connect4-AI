@@ -20,7 +20,7 @@ function GameBoard(props){
     }
 
     return (
-        <div style={{display: "flex"}}  >
+        <div className={'game-board'} >
             {makeColumns()}
         </div>
     )

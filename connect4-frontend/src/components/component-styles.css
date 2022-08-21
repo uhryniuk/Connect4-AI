@@ -1,3 +1,11 @@
+.game-board {
+    display: flex;
+    border-style: solid;
+    border-color: rgb(25, 160, 160);
+    padding: 10px;
+}
+
+
 .cell {
     border-style: solid;
     border-color: rgb(25, 160, 160);
@@ -5,6 +13,7 @@
     height: 50px;
     cursor: pointer;
     user-select: none;
+    border-radius: 90px;
 }
 
 .empty {
