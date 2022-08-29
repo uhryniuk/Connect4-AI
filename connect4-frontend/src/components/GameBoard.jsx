@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import GameRow from './GameColumn';
 
 function GameBoard(props){
@@ -14,6 +14,7 @@ function GameBoard(props){
                     colIndex={i} 
                     boardState={props.boardState}
                     winnerState={props.winnerState}
+                    cellColors={props.cellColors}
                 />)
         }
         return arr;

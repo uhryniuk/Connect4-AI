@@ -29,11 +29,32 @@ const cheekyDeepCopy = (data) => {
 
 const cellToClassMap = ['empty', 'player', 'agent']
 
+const COLOR_OPTIONS = ["#f44336", "#FFF000", 
+                            "#9c27b0", "#673ab7", 
+                            "#3f51b5", "#2196f3", 
+                            "#03a9f4", "#00bcd4", 
+                            "#009688", "#4caf50"];
+
+const randomColor = () => {
+    return COLOR_OPTIONS[Math.floor(Math.random() * COLOR_OPTIONS.length)]
+}
+
+const cellStateToBoardValue = (cellState) => {
+    switch(cellState){
+        case "player" : return 0;
+        case "agent" : return 1;
+        default: null;
+    }
+}
+
 const utils = {
     makeBlankBoard : makeBlankBoard,
     cellToClassMap : cellToClassMap,
     cheekyDeepCopy : cheekyDeepCopy,
     transposeBoard : transposeBoard,
+    COLOR_OPTIONS  : COLOR_OPTIONS,
+    randomColor    : randomColor,
+    cellStateToBoardValue : cellStateToBoardValue,
 };
 
 export default utils;

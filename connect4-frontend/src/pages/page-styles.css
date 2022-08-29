@@ -1,14 +1,19 @@
+.home-page-container {
+    width: min-content;
+}
+
 .board-container {
     display: grid;
     justify-content: center;
+    
 }
 
-/* Temp Styles */
-.temp-reset-button {
-    user-select: none;
+.color-picker-container {
+    display: flex;
+    justify-content: center;
+
 }
 
-.temp-reset-button:hover {
-    color: greenyellow;
-    cursor: pointer;
+@media only screen and (max-width: 600px) {
+    
 }

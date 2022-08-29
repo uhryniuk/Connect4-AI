@@ -1,9 +1,13 @@
 import React from "react";
 import { useState } from "react";
+import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
 
 import GameBoard from '../components/GameBoard'
+import ColorPicker from "../components/ColorPicker";
 import utils from '../lib/utils'
 import './page-styles.css'
+import { AlertTitle } from "@mui/material";
 
 const HomePage = (props) => {
     
@@ -11,30 +15,52 @@ const HomePage = (props) => {
     const [board, setBoard]   = useState(utils.makeBlankBoard())
     const [winner, setWinner] = useState(null);
 
+    const [clientColor, setClientColor] = useState(utils.randomColor());
+    const [agentColor, setAgentColor]   = useState(utils.randomColor());
+
+    // TODO This should really be it's own component
+    // Perhaps named "GameAlert" or "WinnerAlert"
     const gameCompletedAlert = () => {
         // Can we randomize these messages for fun?
         const alerts = [
-            <div>you win!!</div>,
-            <div>you lose fucker!</div>
-            // <Alert severity='success'>Wow! Somehow you won!</Alert>,
-            // <Alert severity='error'>Dang! Looks like I smoked you!</Alert>,
+            <Alert variant="outlined" severity='success'>
+                <AlertTitle>You Win?!</AlertTitle>
+                Not sure how, but you pulled it off!
+            </Alert>,
+            <Alert variant="outlined" severity='error'>
+                <AlertTitle>You Lose!</AlertTitle>
+                LMAO! you thought you had a chance!
+            </Alert>,
         ]
         return alerts[(Number(winner)-1)] || <div>&nbsp;</div>
     }
 
     return (
-        <div>
+        <div class-name={'home-page-container'}>
             <div className="board-container">
-                <GameBoard boardState={[board,setBoard]} winnerState={[winner, setWinner]} />
-            </div>
-            {gameCompletedAlert()}
-            <div 
-                className="temp-reset-button" 
+                {gameCompletedAlert()}
+                <br />
+                <GameBoard 
+                    boardState={[board,setBoard]} 
+                    winnerState={[winner, setWinner]} 
+                    cellColors={[clientColor, agentColor]}
+                />
+                <br />
+                <Button 
                 onClick={() => {
-                        setBoard(utils.makeBlankBoard())
-                        setWinner(null)
-                    }} >
-                Reset Button
+                    setBoard(utils.makeBlankBoard())
+                    setWinner(null)
+                }}
+                color="error"
+                variant='outlined'>
+                Reset Game
+                </Button>
+                <br />
+            </div>
+            <div className="color-picker-container">
+                <ColorPicker name={"CLIENT"} colorState={[clientColor, setClientColor]} />
+                <div>&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                <ColorPicker name={"AGENT"} colorState={[agentColor, setAgentColor] } />
             </div>
         </div>
     )
