@@ -13,11 +13,11 @@ public class BoardMove extends Endpoint{
         addHeader("Content-Type", "applcation/json");
     }
 
-    public String makeRandomMove(String boardJSON){
+    // Init the minimax to find optimal board and return it.
+    private String makeRandomMove(String boardJSON){
         Gson gson = new Gson();
         String[][] boardObj = gson.fromJson(boardJSON, String[][].class);
         Board board = Minimax.getAI().getResponse(new Board(boardObj));
-
         return gson.toJson(board.getParentBoard().getBoard(), String[][].class);
     }
 

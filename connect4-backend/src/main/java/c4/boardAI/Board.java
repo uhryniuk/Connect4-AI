@@ -10,15 +10,16 @@ public class Board {
     
     private String[][] board;                   // Data Structure for board
     private ArrayList<int[]> possiblePositions; // Data Structure for all child nodes
-    private Board parentBoard = null;
+    private Board parentBoard = null;           // Board that stems from the root node.
 
-    /* Constructor */
+    // Base implementation
     public Board(String[][] board){
         this.board = board;
         this.possiblePositions = new ArrayList<int[]>();
         this.generatePossiblePositions(this.possiblePositions);
     }
 
+    // Makes this easy to apply the parentboard.
     public Board(String[][] board, Board parentBoard){
         this.board = board;
         this.possiblePositions = new ArrayList<int[]>();
@@ -26,14 +27,13 @@ public class Board {
         this.setParentBoard(parentBoard);
     }
 
-    // Getters
+    // Getters and Setters
     public String[][] getBoard(){return this.board;}
 
     public ArrayList<int[]> getPossiblePositions(){return this.possiblePositions;}
     
     public Board getParentBoard(){return this.parentBoard;}
 
-    // Setters
     public void setBoard(String[][] newBoard){
         this.board = newBoard;
     }

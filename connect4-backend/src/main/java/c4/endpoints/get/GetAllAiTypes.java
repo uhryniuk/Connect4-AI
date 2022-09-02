@@ -9,5 +9,4 @@ public class GetAllAiTypes extends Endpoint{
         setRoute("/api/ai-types");
         setResponse("under construction");
     }
-    
 }

@@ -19,6 +19,7 @@ public class App
         
         ais.addEndpoint(new BlankBoard());
         ais.addEndpoint(new BoardMove());
+        ais.addEndpoint(new GetAllAiTypes());
         ais.start();
 
         Scanner kb = new Scanner(System.in);
