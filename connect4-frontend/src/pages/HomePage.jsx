@@ -19,7 +19,6 @@ const HomePage = (props) => {
     const [agentColor, setAgentColor]   = useState(utils.randomColor());
 
     // TODO This should really be it's own component
-    // Perhaps named "GameAlert" or "WinnerAlert"
     const gameCompletedAlert = () => {
         // Can we randomize these messages for fun?
         const alerts = [
@@ -38,6 +37,7 @@ const HomePage = (props) => {
     return (
         <div class-name={'home-page-container'}>
             <div className="board-container">
+                <br/>
                 {gameCompletedAlert()}
                 <br />
                 <GameBoard 
