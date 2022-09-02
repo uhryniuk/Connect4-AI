@@ -8,14 +8,13 @@ import java.util.concurrent.ExecutorService;
 import java.io.IOException;
 import java.util.HashSet;
 
-public class AIServer extends Thread {
+public class AIServer{
    
     // Make the server a singleton, this way easy to access all over.
     private HttpServer server;
     private int PORT = 8050;
     private ExecutorService threadPool;
     private HashSet<Endpoint> endpoints = new HashSet<>();
-    // private Thread serverThread;
 
     public AIServer(){
         System.out.println("Server is being consructed..");

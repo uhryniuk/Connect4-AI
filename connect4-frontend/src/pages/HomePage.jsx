@@ -47,19 +47,18 @@ const HomePage = (props) => {
                 />
                 <br />
                 <Button 
-                onClick={() => {
-                    setBoard(utils.makeBlankBoard())
-                    setWinner(null)
-                }}
-                color="error"
-                variant='outlined'>
-                Reset Game
+                    onClick={() => {
+                        setBoard(utils.makeBlankBoard())
+                        setWinner(null)
+                    }}
+                    color="error"
+                    variant='outlined'>
+                    {"Reset Game"}
                 </Button>
                 <br />
             </div>
             <div className="color-picker-container">
                 <ColorPicker name={"CLIENT"} colorState={[clientColor, setClientColor]} />
-                <div>&nbsp;&nbsp;&nbsp;&nbsp;</div>
                 <ColorPicker name={"AGENT"} colorState={[agentColor, setAgentColor] } />
             </div>
         </div>

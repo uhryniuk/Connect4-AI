@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import c4.boardAI.Board;
 
 public class Minimax {
-    private static Minimax ai = null; // Singleton of the AI, so memory is consistent.
-    private final static int DEPTH = 4;
+    // This class is a Singleton.
+    private static Minimax ai = null; 
+    private final static int DEPTH = 5;
 
     /* Constructor */
     private Minimax(){}
@@ -30,7 +31,7 @@ public class Minimax {
      * @return      Optimal Move to make.
      */
     public Board getResponse(Board board){
-        System.out.println("\nStill need to add a logger :/");
+        System.out.println("\nStill need to add a logger :/ REMOVE ME!");
         return getOptimalMove(board);
     }
     
